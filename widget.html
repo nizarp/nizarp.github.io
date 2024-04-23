@@ -3,195 +3,47 @@
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
   <div class="tradingview-widget-container__widget"></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
   {
-  "colorTheme": "light",
-  "dateRange": "12M",
-  "showChart": true,
-  "locale": "en",
-  "width": "100%",
-  "height": "100%",
-  "largeChartUrl": "",
-  "isTransparent": false,
-  "showSymbolLogo": true,
-  "showFloatingTooltip": false,
-  "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
-  "plotLineColorFalling": "rgba(41, 98, 255, 1)",
-  "gridLineColor": "rgba(240, 243, 250, 0)",
-  "scaleFontColor": "rgba(106, 109, 120, 1)",
-  "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-  "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-  "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-  "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-  "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-  "tabs": [
+  "symbols": [
     {
-      "title": "Indices",
-      "symbols": [
-        {
-          "s": "NASDAQ:NDX",
-          "d": "NASDAQ-100"
-        },
-        {
-          "s": "OANDA:SPX500USD",
-          "d": "S&P 500"
-        },
-        {
-          "s": "INDEX:HSI",
-          "d": "Hang Seng Index"
-        },
-        {
-          "s": "SPREADEX:FTSE",
-          "d": "FTSE 100"
-        },
-        {
-          "s": "SPREADEX:DJI",
-          "d": "Dow Jones Industrial Average"
-        },
-        {
-          "s": "XETR:DAX",
-          "d": "DAX 30"
-        },
-        {
-          "s": "INDEX:SX5E",
-          "d": "Euro STOXX 50"
-        },
-        {
-          "s": "VANTAGE:BVSPX",
-          "d": "Bovespa Index"
-        },
-        {
-          "s": "BSE:SENSEX",
-          "d": "SENSEX"
-        },
-        {
-          "s": "ADX:FADGI",
-          "d": " FTSE ADX"
-        }
-      ],
-      "originalTitle": "Indices"
+      "proName": "FOREXCOM:SPXUSD",
+      "title": "S&P 500 Index"
     },
     {
-      "title": "Forex",
-      "symbols": [
-        {
-          "s": "FX:GBPUSD",
-          "d": "GBP to USD"
-        },
-        {
-          "s": "FX:USDJPY",
-          "d": "USD to JPY"
-        },
-        {
-          "s": "FX:USDCHF",
-          "d": "USD to CHF"
-        },
-        {
-          "s": "FX:USDCAD",
-          "d": "USD to CAD"
-        },
-        {
-          "s": "FX_IDC:AEDINR",
-          "d": "AED to INR"
-        },
-        {
-          "s": "FX_IDC:USDAUD",
-          "d": "USD to AUD"
-        },
-        {
-          "s": "FX_IDC:USDGBP",
-          "d": "USD to GBP"
-        },
-        {
-          "s": "FX_IDC:AEDEUR",
-          "d": "AED to EUR"
-        },
-        {
-          "s": "FX_IDC:AEDPKR",
-          "d": "AED to PKR"
-        },
-        {
-          "s": "FX_IDC:USDPHP",
-          "d": "USD to PHP"
-        },
-        {
-          "s": "FX_IDC:USDNPR",
-          "d": "USD to NPR"
-        },
-        {
-          "s": "FX_IDC:USDLKR",
-          "d": "USD to LKR"
-        },
-        {
-          "s": "FX:USDCNH",
-          "d": "USD to CNH"
-        },
-        {
-          "s": "FX_IDC:USDBDT",
-          "d": "USD to BDT"
-        },
-        {
-          "s": "FX_IDC:USDEUR",
-          "d": "USD to EUR"
-        }
-      ],
-      "originalTitle": "Forex"
+      "proName": "FX_IDC:EURUSD",
+      "title": "EUR to USD"
     },
     {
-      "title": "Crypto",
-      "symbols": [
-        {
-          "s": "BITSTAMP:BTCUSD",
-          "d": "BTC to USD"
-        },
-        {
-          "s": "BITSTAMP:ETHUSD",
-          "d": "ETH to USD"
-        },
-        {
-          "s": "BITSTAMP:USDTUSD",
-          "d": "USDT to USD"
-        },
-        {
-          "s": "BINANCE:BNBUSD",
-          "d": "BNB to USD"
-        },
-        {
-          "s": "BINANCE:SOLUSD",
-          "d": "SOL to USD"
-        },
-        {
-          "s": "BITSTAMP:XRPUSD",
-          "d": "XRP to USD"
-        },
-        {
-          "s": "BINANCE:DOGEUSD",
-          "d": "DOGE to USD"
-        }
-      ]
+      "proName": "BITSTAMP:BTCUSD",
+      "title": "Bitcoin"
     },
     {
-      "title": "Commodities",
-      "symbols": [
-        {
-          "s": "TVC:GOLD",
-          "d": "GOLD (US$/Oz)"
-        },
-        {
-          "s": "TVC:SILVER",
-          "d": "SILVER (US$/Oz)"
-        },
-        {
-          "s": "TVC:PLATINUM",
-          "d": "PLATINUM (US$/Oz)"
-        },
-        {
-          "s": "EASYMARKETS:OILUSD",
-          "d": "CRUDE OIL (US$)"
-        }
-      ]
+      "proName": "BITSTAMP:ETHUSD",
+      "title": "Ethereum"
+    },
+    {
+      "description": "FTSE ADX General Index",
+      "proName": "ADX:FADGI"
+    },
+    {
+      "description": "Gold (US$/Oz)",
+      "proName": "TVC:GOLD"
+    },
+    {
+      "description": "AED to INR",
+      "proName": "FX_IDC:AEDINR"
+    },
+    {
+      "description": "AED to PKR",
+      "proName": "FX_IDC:AEDPKR"
     }
-  ]
+  ],
+  "showSymbolLogo": true,
+  "isTransparent": false,
+  "displayMode": "adaptive",
+  "colorTheme": "light",
+  "locale": "en"
 }
   </script>
 </div>
