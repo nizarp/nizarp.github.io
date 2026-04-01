@@ -370,9 +370,9 @@ function render() {
   document.getElementById('out-lp').textContent = '₹' + lP;
   document.getElementById('out-dp').textContent = '₹' + dP;
 
-  const patB = beds * 0.5;
-  const patL = beds * 0.2;
-  const patD = beds * 0.15;
+  const patB = beds * 0.75;
+  const patL = beds * 0.75;
+  const patD = beds * 0.75;
 
   const bystCount = beds * bystPerPat * bystPct;
   const bystB = bystCount * 0.6;
@@ -423,8 +423,8 @@ function render() {
   `;
 
   const foodCost = totalRev * 0.40;
-  const labor = 15 * 15000;
-  const rent = 350000;
+  const labor = 25 * 20000;
+  const rent = 385000;
   const utilities = 38000;
   const misc = 22000;
   const partnerSalary = 35000;
@@ -443,7 +443,7 @@ function render() {
   document.getElementById('cost-list').innerHTML = `
     <div class="cost-item"><span class="ciname">Rent</span><span>${fmt(rent)}</span></div>
     <div class="cost-item"><span class="ciname">Food & raw materials (40%)</span><span>${fmt(foodCost)}</span></div>
-    <div class="cost-item"><span class="ciname">Labour — 15 staff</span><span>${fmt(labor)}</span></div>
+    <div class="cost-item"><span class="ciname">Labour — 25 staff</span><span>${fmt(labor)}</span></div>
     <div class="cost-item"><span class="ciname">Utilities (gas, electricity, water)</span><span>${fmt(utilities)}</span></div>
     <div class="cost-item"><span class="ciname">Partner salary</span><span>${fmt(partnerSalary)}</span></div>
     <div class="cost-item"><span class="ciname">Misc (packaging, maintenance)</span><span>${fmt(misc)}</span></div>
