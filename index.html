@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Canteen — Financial Projections</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f4ee;
+    --surface: #ffffff;
+    --surface2: #f0ece3;
+    --border: #ddd8cc;
+    --text: #1a1714;
+    --muted: #7a756c;
+    --accent: #2d4a3e;
+    --accent2: #c4622d;
+    --accent3: #4a7c59;
+    --warn: #b85c1a;
+    --profit: #2d5a3d;
+    --loss: #8b2020;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: 'DM Mono', 'Courier New', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: var(--accent);
+    color: #e8f0eb;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    right: -60px; bottom: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 40px solid rgba(255,255,255,0.06);
+  }
+  .header-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232,240,235,0.6);
+    margin-bottom: 0.5rem;
+  }
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .header-title em { font-style: italic; color: #a8c5b0; }
+  .header-sub {
+    font-size: 12px;
+    color: rgba(232,240,235,0.6);
+  }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 2rem 0 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Sliders */
+  .sliders-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+  }
+  @media (max-width: 600px) { .sliders-grid { grid-template-columns: 1fr; } }
+  .slider-item label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .slider-item label span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  /* Meal table */
+  .meal-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .meal-table th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .meal-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .meal-table tr:last-child td {
+    border-bottom: none;
+    font-weight: 500;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Revenue cards */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .card .clabel {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .card .cval {
+    font-size: 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .card .csub {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .card.accent { background: var(--accent); border-color: var(--accent); }
+  .card.accent .clabel { color: rgba(232,240,235,0.6); }
+  .card.accent .cval { color: #e8f0eb; }
+  .card.accent .csub { color: rgba(232,240,235,0.55); }
+  .card.profit .cval { color: var(--profit); }
+  .card.loss .cval { color: var(--loss); }
+
+  /* Cost table */
+  .cost-list { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .cost-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .cost-item:last-child { border-bottom: none; font-weight: 500; background: var(--surface2); }
+  .cost-item .ciname { color: var(--muted); }
+  .cost-item:last-child .ciname { color: var(--text); }
+
+  /* Bar */
+  .bar-section { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-name { font-size: 11px; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+  .bar-amt { font-size: 12px; font-weight: 500; width: 90px; text-align: right; flex-shrink: 0; }
+
+  /* Two-year */
+  .twoyr-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+  }
+  .twoyr-item .ti-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .twoyr-item .ti-val { font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; line-height: 1; }
+  .twoyr-item .ti-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Daily target */
+  .daily-target {
+    background: var(--accent2);
+    color: #fff;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .daily-target .dt-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; }
+  .daily-target .dt-val { font-family: var(--font-display); font-size: 2rem; font-weight: 600; }
+  .daily-target .dt-sub { font-size: 12px; opacity: 0.7; margin-left: auto; }
+
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding: 0.85rem 1.25rem;
+    background: var(--surface2);
+    border-radius: 6px;
+    border-left: 3px solid var(--border);
+    margin-top: 1rem;
+  }
+  .note strong { color: var(--text); font-weight: 500; }
+
+  .divider { height: 1px; background: var(--border); margin: 2.5rem 0; }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-eyebrow">Financial model · 2-year lease</div>
+  <div class="header-title">Hospital Canteen<br><em>Calicut</em></div>
+  <div class="header-sub">500-bed cooperative hospital · ₹3.5L/month rent · ₹25L security deposit</div>
+</div>
+
+<div class="container">
+
+  <div class="section-label">Adjust assumptions</div>
+  <div class="sliders-grid">
+    <div class="slider-item">
+      <label>Beds occupied (avg) <span id="out-beds">460</span></label>
+      <input type="range" min="350" max="500" step="10" value="460" id="sl-beds" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Bystanders per patient <span id="out-byst">1.3</span></label>
+      <input type="range" min="0.8" max="2.0" step="0.1" value="1.3" id="sl-byst" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>% bystanders eating here <span id="out-bpct">55%</span></label>
+      <input type="range" min="30" max="80" step="5" value="55" id="sl-bpct" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Staff eating here / day <span id="out-staff">80</span></label>
+      <input type="range" min="40" max="150" step="5" value="80" id="sl-staff" oninput="render()">
+    </div>
+  </div>
+
+  <div class="section-label">Meal pricing</div>
+  <div class="sliders-grid">
+    <div class="slider-item">
+      <label>Avg breakfast price <span id="out-bp">₹60</span></label>
+      <input type="range" min="30" max="120" step="5" value="60" id="sl-bp" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Avg lunch price <span id="out-lp">₹100</span></label>
+      <input type="range" min="60" max="200" step="5" value="100" id="sl-lp" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Avg dinner price <span id="out-dp">₹100</span></label>
+      <input type="range" min="60" max="200" step="5" value="100" id="sl-dp" oninput="render()">
+    </div>
+  </div>
+
+  <div class="section-label">Daily meal counts</div>
+  <table class="meal-table" id="meal-table"></table>
+
+  <div class="section-label">Monthly revenue</div>
+  <div class="cards-grid" id="rev-cards"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Revenue vs costs</div>
+  <div class="bar-section" id="bar-section"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Monthly costs</div>
+  <div class="cost-list" id="cost-list"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Monthly P&L</div>
+  <div class="cards-grid" id="pnl-cards"></div>
+
+  <div style="margin-top:1rem;" id="daily-target-wrap"></div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">2-year outlook</div>
+  <div class="twoyr-box" id="twoyr"></div>
+
+  <div class="note" id="note-box"></div>
+
+</div>
+
+<footer id="footer-bar">Calicut Hospital Canteen · Projections model</footer>
+
+<script>
+const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmtL = n => {
+  const l = Math.round(n) / 100000;
+  return (l >= 0 ? '' : '-') + '₹' + Math.abs(l).toFixed(1) + 'L';
+};
+
+function render() {
+  const beds = +document.getElementById('sl-beds').value;
+  const bystPerPat = +document.getElementById('sl-byst').value;
+  const bystPct = +document.getElementById('sl-bpct').value / 100;
+  const staff = +document.getElementById('sl-staff').value;
+
+  const bP = +document.getElementById('sl-bp').value;
+  const lP = +document.getElementById('sl-lp').value;
+  const dP = +document.getElementById('sl-dp').value;
+
+  document.getElementById('out-beds').textContent = beds;
+  document.getElementById('out-byst').textContent = bystPerPat.toFixed(1);
+  document.getElementById('out-bpct').textContent = +document.getElementById('sl-bpct').value + '%';
+  document.getElementById('out-staff').textContent = staff;
+  document.getElementById('out-bp').textContent = '₹' + bP;
+  document.getElementById('out-lp').textContent = '₹' + lP;
+  document.getElementById('out-dp').textContent = '₹' + dP;
+
+  const patB = beds * 0.5;
+  const patL = beds * 0.2;
+  const patD = beds * 0.15;
+
+  const bystCount = beds * bystPerPat * bystPct;
+  const bystB = bystCount * 0.6;
+  const bystL = bystCount * 0.85;
+  const bystD = bystCount * 0.65;
+
+  const staffB = staff * 0.5;
+  const staffL = staff * 0.8;
+  const staffD = staff * 0.3;
+
+  const visitors = beds * 0.4;
+  const visL = visitors * 0.3;
+
+  const totalB = patB + bystB + staffB;
+  const totalL = patL + bystL + staffL + visL;
+  const totalD = patD + bystD + staffD;
+  const totalMeals = totalB + totalL + totalD;
+
+  const dayRevB = totalB * bP;
+  const dayRevL = totalL * lP;
+  const dayRevD = totalD * dP;
+
+  const snacksMon = ((beds * bystPerPat * bystPct * 30) + (staff * 20) + (beds * 0.5 * 15));
+
+  const monRevB = dayRevB * 30;
+  const monRevL = dayRevL * 30;
+  const monRevD = dayRevD * 30;
+  const totalRev = monRevB + monRevL + monRevD + snacksMon;
+
+  document.getElementById('meal-table').innerHTML = `
+    <thead><tr>
+      <th>Segment</th><th>Breakfast</th><th>Lunch</th><th>Dinner</th><th>Daily total</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Patients</td><td>${Math.round(patB)}</td><td>${Math.round(patL)}</td><td>${Math.round(patD)}</td><td>${Math.round(patB+patL+patD)}</td></tr>
+      <tr><td>Bystanders</td><td>${Math.round(bystB)}</td><td>${Math.round(bystL)}</td><td>${Math.round(bystD)}</td><td>${Math.round(bystB+bystL+bystD)}</td></tr>
+      <tr><td>Staff</td><td>${Math.round(staffB)}</td><td>${Math.round(staffL)}</td><td>${Math.round(staffD)}</td><td>${Math.round(staffB+staffL+staffD)}</td></tr>
+      <tr><td>Visitors</td><td>—</td><td>${Math.round(visL)}</td><td>—</td><td>${Math.round(visL)}</td></tr>
+      <tr><td>Total covers / day</td><td>${Math.round(totalB)}</td><td>${Math.round(totalL)}</td><td>${Math.round(totalD)}</td><td>${Math.round(totalMeals)}</td></tr>
+    </tbody>`;
+
+  document.getElementById('rev-cards').innerHTML = `
+    <div class="card"><div class="clabel">Breakfast ×30</div><div class="cval">${fmt(monRevB)}</div><div class="csub">${Math.round(totalB)} covers/day × ₹${bP}</div></div>
+    <div class="card"><div class="clabel">Lunch ×30</div><div class="cval">${fmt(monRevL)}</div><div class="csub">${Math.round(totalL)} covers/day × ₹${lP}</div></div>
+    <div class="card"><div class="clabel">Dinner ×30</div><div class="cval">${fmt(monRevD)}</div><div class="csub">${Math.round(totalD)} covers/day × ₹${dP}</div></div>
+    <div class="card"><div class="clabel">Snacks & beverages</div><div class="cval">${fmt(snacksMon)}</div><div class="csub">Tea, juice, packaged</div></div>
+    <div class="card accent"><div class="clabel">Total revenue</div><div class="cval">${fmtL(totalRev)}</div><div class="csub">per month</div></div>
+  `;
+
+  const foodCost = totalRev * 0.40;
+  const labor = 15 * 15000;
+  const rent = 350000;
+  const utilities = 38000;
+  const misc = 22000;
+  const partnerSalary = 35000;
+  const totalCost = foodCost + labor + rent + utilities + misc + partnerSalary;
+  const profit = totalRev - totalCost;
+  const margin = profit / totalRev * 100;
+
+  const maxBar = totalRev;
+  document.getElementById('bar-section').innerHTML = `
+    <div class="bar-row"><span class="bar-name">Revenue</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#2d4a3e;"></div></div><span class="bar-amt">${fmtL(totalRev)}</span></div>
+    <div class="bar-row"><span class="bar-name">Food cost</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(foodCost/maxBar*100)}%;background:#c4622d;"></div></div><span class="bar-amt">${fmtL(foodCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Fixed costs</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round((totalCost-foodCost)/maxBar*100)}%;background:#8b6a4a;"></div></div><span class="bar-amt">${fmtL(totalCost-foodCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.round(profit/maxBar*100))}%;background:${profit>=0?'#4a7c59':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
+  `;
+
+  document.getElementById('cost-list').innerHTML = `
+    <div class="cost-item"><span class="ciname">Rent</span><span>${fmt(rent)}</span></div>
+    <div class="cost-item"><span class="ciname">Food & raw materials (40%)</span><span>${fmt(foodCost)}</span></div>
+    <div class="cost-item"><span class="ciname">Labour — 15 staff</span><span>${fmt(labor)}</span></div>
+    <div class="cost-item"><span class="ciname">Utilities (gas, electricity, water)</span><span>${fmt(utilities)}</span></div>
+    <div class="cost-item"><span class="ciname">Partner salary</span><span>${fmt(partnerSalary)}</span></div>
+    <div class="cost-item"><span class="ciname">Misc (packaging, maintenance)</span><span>${fmt(misc)}</span></div>
+    <div class="cost-item"><span class="ciname">Total monthly costs</span><span>${fmt(totalCost)}</span></div>
+  `;
+
+  const profitClass = profit >= 0 ? 'profit' : 'loss';
+  document.getElementById('pnl-cards').innerHTML = `
+    <div class="card"><div class="clabel">Total revenue</div><div class="cval">${fmtL(totalRev)}</div></div>
+    <div class="card"><div class="clabel">Total costs</div><div class="cval">${fmtL(totalCost)}</div></div>
+    <div class="card ${profitClass}"><div class="clabel">Monthly profit</div><div class="cval">${fmtL(profit)}</div><div class="csub">${margin.toFixed(1)}% net margin</div></div>
+  `;
+
+  document.getElementById('daily-target-wrap').innerHTML = `
+    <div class="daily-target">
+      <div><div class="dt-label">Daily revenue target</div><div class="dt-val">${fmt(Math.round(totalRev/30))}</div></div>
+      <div class="dt-sub">${Math.round(totalMeals)} meal covers/day across all segments</div>
+    </div>
+  `;
+
+  const deposit = 2500000;
+  const profit2yr = profit * 24;
+  const breakEvenMon = profit > 0 ? Math.ceil(deposit / profit) : null;
+  const roi = (profit2yr / deposit * 100).toFixed(0);
+
+  document.getElementById('twoyr').innerHTML = `
+    <div class="twoyr-item"><div class="ti-label">2-yr cumulative profit</div><div class="ti-val" style="color:${profit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit2yr)}</div><div class="ti-sub">before deposit return</div></div>
+    <div class="twoyr-item"><div class="ti-label">Security deposit</div><div class="ti-val">₹25L</div><div class="ti-sub">refundable at lease end</div></div>
+    <div class="twoyr-item"><div class="ti-label">Break-even on deposit</div><div class="ti-val">${breakEvenMon ? breakEvenMon + ' mo' : '—'}</div><div class="ti-sub">${breakEvenMon ? 'to recover ₹25L' : 'not profitable'}</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr ROI on deposit</div><div class="ti-val" style="color:${+roi>=0?'var(--profit)':'var(--loss)'}">${roi}%</div><div class="ti-sub">on ₹25L invested capital</div></div>
+  `;
+
+  const bystLever = Math.round((beds * bystPerPat * 0.15) * ((bP*0.6 + lP*0.85 + dP*0.65)/3) * 30 / 100000 * 10) / 10;
+  document.getElementById('note-box').innerHTML =
+    `<strong>Key lever:</strong> Moving bystander participation from ${+document.getElementById('sl-bpct').value}% to ${Math.min(80, +document.getElementById('sl-bpct').value + 15)}% adds approximately ₹${bystLever}L/month. ` +
+    `<strong>Lunch is the anchor meal</strong> — ${Math.round(totalL)} covers/day at ₹${lP} each drives ${Math.round(monRevL/totalRev*100)}% of meal revenue. ` +
+    `<strong>Validate on the ground:</strong> ask the current operator for actual daily cover counts before signing.`;
+  document.getElementById('footer-bar').textContent =
+    `Calicut Hospital Canteen · Projections model · Breakfast ₹${bP} · Lunch ₹${lP} · Dinner ₹${dP}`;
+}
+
+render();
+</script>
+</body>
+</html>
