@@ -199,8 +199,8 @@
       <input type="range" min="0" max="60000" step="5000" value="25000" id="sl-mnt" oninput="render()">
     </div>
     <div class="slider-item">
-      <label>Accounting, CA &amp; software <span id="out-acc">₹15,000</span></label>
-      <input type="range" min="0" max="40000" step="5000" value="15000" id="sl-acc" oninput="render()">
+      <label>Accounting, CA &amp; software <span id="out-acc">₹5,000</span></label>
+      <input type="range" min="0" max="40000" step="5000" value="5000" id="sl-acc" oninput="render()">
     </div>
     <div class="slider-item">
       <label>Stationery <span id="out-stn">₹20,000</span></label>
@@ -217,11 +217,11 @@
   </div>
   <div class="revenue-hero" id="rev-hero"></div>
 
-  <div class="section-label" style="margin-top:1.5rem;">Revenue vs costs</div>
-  <div class="bar-section" id="bar-section"></div>
-
   <div class="section-label" style="margin-top:1.5rem;">Monthly costs</div>
   <div class="cost-list" id="cost-list"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Revenue vs costs</div>
+  <div class="bar-section" id="bar-section"></div>
 
   <div class="section-label" style="margin-top:1.5rem;">Monthly P&amp;L</div>
   <div class="cards-grid" id="pnl-cards"></div>
@@ -234,20 +234,18 @@
   <div class="section-label" style="margin-top:1.5rem;">Profit distribution</div>
   <div class="share-grid" id="share-grid"></div>
 
-  <div class="note" id="note-box"></div>
-
 </div>
 
 <footer id="footer-bar">Calicut Hospital Canteen · Financial Projections · 2-year lease</footer>
 
 <script>
 const fmt  = n => '₹' + Math.round(n).toLocaleString('en-IN');
-const fmtL = n => { const l = Math.round(n)/100000; return (l>=0?'':'-')+'₹'+Math.abs(l).toFixed(1)+'L'; };
+const fmtL = n => { const l = n/100000; return (l>=0?'':'-')+'₹'+Math.abs(l).toFixed(2)+'L'; };
 const fmtK = n => {
   const abs = Math.abs(n);
   const sign = n >= 0 ? '' : '-';
   if (abs >= 100000) { return sign + '₹' + (abs/100000).toFixed(2) + 'L'; }
-  return sign + '₹' + (abs/1000).toFixed(1) + 'k';
+  return sign + '₹' + (abs/1000).toFixed(2) + 'k';
 };
 
 function render() {
@@ -295,12 +293,15 @@ function render() {
   const profit      = totalRev - totalCost;
   const margin      = profit / totalRev * 100;
 
+  const grossProfit = totalRev - foodCost;
+  const totalOpex   = fixedOpex + varCost;
+
   document.getElementById('bar-section').innerHTML = `
     <div class="bar-row"><span class="bar-name">Revenue</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#2d4a3e;"></div></div><span class="bar-amt">${fmtL(totalRev)}</span></div>
-    <div class="bar-row"><span class="bar-name">Food cost</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(foodCost/totalRev*100)}%;background:#c4622d;"></div></div><span class="bar-amt">${fmtL(foodCost)}</span></div>
-    <div class="bar-row"><span class="bar-name">Fixed opex</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(fixedOpex/totalRev*100)}%;background:#8b6a4a;"></div></div><span class="bar-amt">${fmtL(fixedOpex)}</span></div>
-    <div class="bar-row"><span class="bar-name">Variable</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.round(varCost/totalRev*100))}%;background:#BA7517;"></div></div><span class="bar-amt">${fmtL(varCost)}</span></div>
-    <div class="bar-row"><span class="bar-name">Profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.round(profit/totalRev*100))}%;background:${profit>=0?'#4a7c59':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
+    <div class="bar-row"><span class="bar-name">Food cost</span><div class="bar-track"><div class="bar-fill" style="width:${(foodCost/totalRev*100).toFixed(2)}%;background:#c4622d;"></div></div><span class="bar-amt">${fmtL(foodCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Opex</span><div class="bar-track"><div class="bar-fill" style="width:${((fixedOpex+varCost)/totalRev*100).toFixed(2)}%;background:#8b6a4a;"></div></div><span class="bar-amt">${fmtL(fixedOpex+varCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Total cost</span><div class="bar-track"><div class="bar-fill" style="width:${(totalCost/totalRev*100).toFixed(2)}%;background:#BA7517;"></div></div><span class="bar-amt">${fmtL(totalCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Net profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,(profit/totalRev*100)).toFixed(2)}%;background:${profit>=0?'#2d5a3d':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
   `;
 
   document.getElementById('cost-list').innerHTML = `
@@ -323,33 +324,35 @@ function render() {
   const pClass = profit >= 0 ? 'profit' : 'loss';
   document.getElementById('pnl-cards').innerHTML = `
     <div class="card"><div class="clabel">Monthly revenue</div><div class="cval">${fmtL(totalRev)}</div></div>
-    <div class="card"><div class="clabel">Fixed opex</div><div class="cval">${fmtL(fixedOpex)}</div><div class="csub">excl. food &amp; variable</div></div>
-    <div class="card"><div class="clabel">Food cost</div><div class="cval">${fmtL(foodCost)}</div><div class="csub">${+document.getElementById('sl-fc').value}% of revenue</div></div>
-    <div class="card ${pClass}"><div class="clabel">Monthly net profit</div><div class="cval">${fmtL(profit)}</div><div class="csub">${margin.toFixed(1)}% net margin</div></div>
+    <div class="card"><div class="clabel">Total cost</div><div class="cval">${fmtL(totalCost)}</div><div class="csub">${(totalCost/totalRev*100).toFixed(2)}% of revenue</div></div>
+    <div class="card ${pClass}"><div class="clabel">Net profit</div><div class="cval">${fmtL(profit)}</div><div class="csub">${margin.toFixed(2)}% net margin</div></div>
   `;
 
   // 2-year partnership
-  const profit2yr = profit * 24;
-  const deposit   = 2500000;
-  const breakEven = profit > 0 ? Math.ceil(deposit / profit) : null;
+  const profit2yr    = profit * 24;
+  const revenue2yr   = totalRev * 24;
+  const grossProfit2yr = grossProfit * 24;
+  const deposit      = 2500000;
+  const breakEven    = profit > 0 ? Math.ceil(deposit / profit) : null;
 
   document.getElementById('twoyr').innerHTML = `
-    <div class="twoyr-item"><div class="ti-label">2-yr gross profit</div><div class="ti-val" style="color:${profit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit2yr)}</div><div class="ti-sub">full partnership</div></div>
-    <div class="twoyr-item"><div class="ti-label">Monthly net profit</div><div class="ti-val" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</div><div class="ti-sub">before distribution</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr gross revenue</div><div class="ti-val">${fmtL(revenue2yr)}</div><div class="ti-sub">total sales over 24 months</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr gross profit</div><div class="ti-val" style="color:${grossProfit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(grossProfit2yr)}</div><div class="ti-sub">before all opex</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr net profit</div><div class="ti-val" style="color:${profit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit2yr)}</div><div class="ti-sub">after all costs</div></div>
     <div class="twoyr-item"><div class="ti-label">Break-even</div><div class="ti-val">${breakEven ? breakEven + ' mo' : '—'}</div><div class="ti-sub">to recover ₹25L deposit</div></div>
-    <div class="twoyr-item"><div class="ti-label">Security deposit</div><div class="ti-val">₹25L</div><div class="ti-sub">refundable at month 24</div></div>
   `;
 
-  // Profit distribution — ownership % of net profit (positive or negative)
+  // Profit distribution
   const wpOwnership    = profit * 0.30;
   const passivePerPart = profit * 0.2333;
   const passiveTotal   = profit * 0.70;
 
-  // 2-yr totals
   const wp2yr          = wpOwnership * 24;
-  const wpDeposit      = deposit * 0.30;
   const passive2yr     = passivePerPart * 24;
-  const passiveDeposit = deposit * 0.2333;
+  const depositEach    = 625000; // equal ₹6.25L each
+
+  const wpROI          = ((wp2yr / 1000000) * 100).toFixed(0);
+  const passiveROI     = ((passive2yr / 1000000) * 100).toFixed(0);
 
   const wpProfitCol     = wpOwnership >= 0 ? 'var(--profit)' : 'var(--loss)';
   const passiveProfitCol = passivePerPart >= 0 ? 'var(--profit)' : 'var(--loss)';
@@ -387,13 +390,13 @@ function render() {
         </div>
         <div class="sm-item">
           <div class="sm-label">Deposit refund at exit</div>
-          <div class="sm-val">${fmtL(wpDeposit)}</div>
-          <div class="sm-sub">30% of ₹25L</div>
+          <div class="sm-val">₹6.25L</div>
+          <div class="sm-sub">equal share of ₹25L</div>
         </div>
         <div class="sm-item">
-          <div class="sm-label">Capital contribution</div>
-          <div class="sm-val">₹10L</div>
-          <div class="sm-sub">working partner</div>
+          <div class="sm-label">${wp2yr >= 0 ? 'ROI on ₹10L' : 'Net loss on ₹10L'}</div>
+          <div class="sm-val" style="color:${wp2yrCol}">${wpROI}%</div>
+          <div class="sm-sub">over 2 years</div>
         </div>
       </div>
     </div>
@@ -406,41 +409,23 @@ function render() {
           <div class="sm-sub">23.33% of net ${profit >= 0 ? 'profit' : 'loss'}</div>
         </div>
         <div class="sm-item">
-          <div class="sm-label">All 3 passive combined</div>
-          <div class="sm-val" style="color:${passiveProfitCol}">${fmtK(passiveTotal)}</div>
-          <div class="sm-sub">70% of net ${profit >= 0 ? 'profit' : 'loss'}</div>
-        </div>
-        <div class="sm-item">
           <div class="sm-label">${passive2yrLabel}</div>
           <div class="sm-val" style="color:${passive2yrCol}">${fmtL(passive2yr)}</div>
           <div class="sm-sub">per passive partner</div>
         </div>
         <div class="sm-item">
           <div class="sm-label">Deposit refund at exit</div>
-          <div class="sm-val">${fmtL(passiveDeposit)}</div>
-          <div class="sm-sub">23.33% of ₹25L each</div>
+          <div class="sm-val">₹6.25L</div>
+          <div class="sm-sub">equal share of ₹25L</div>
         </div>
         <div class="sm-item">
           <div class="sm-label">${passive2yr >= 0 ? 'ROI on ₹10L' : 'Net loss on ₹10L'}</div>
-          <div class="sm-val" style="color:${passive2yrCol}">${((passive2yr/1000000)*100).toFixed(0)}%</div>
+          <div class="sm-val" style="color:${passive2yrCol}">${passiveROI}%</div>
           <div class="sm-sub">over 2 years</div>
-        </div>
-        <div class="sm-item">
-          <div class="sm-label">Capital contribution</div>
-          <div class="sm-val">₹10L</div>
-          <div class="sm-sub">each passive partner</div>
         </div>
       </div>
     </div>
   `;
-
-  const fcSwing = fmtL(totalRev * 0.05);
-  const breakEvenSales = Math.ceil(totalCost / 30);
-  document.getElementById('note-box').innerHTML =
-    `<strong>Break-even daily sales: ${fmt(breakEvenSales)}</strong> — below this the business runs at a loss. ` +
-    `<strong>GST (5%) is now included</strong> as a variable cost — it moves with revenue. Confirm exact rate with your CA before launch. ` +
-    `<strong>Fixed opex floor: ${fmtL(fixedOpex)}/month</strong> regardless of revenue. ` +
-    `<strong>Food cost sensitivity:</strong> every 5% shift changes monthly profit by ${fcSwing}.`;
 
   document.getElementById('footer-bar').textContent =
     `Calicut Hospital Canteen · Daily sales: ${fmt(dailySales)} · Food cost: ${+document.getElementById('sl-fc').value}% · WP/Mgr salary: ${fmt(wps)}`;
