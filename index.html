@@ -111,6 +111,22 @@
 </style>
 </head>
 <body>
+<script>
+(function() {
+  const correct = 'kdch';
+  const stored = sessionStorage.getItem('canteen_auth');
+  if (stored === correct) return;
+  let attempts = 0;
+  while (attempts < 3) {
+    const input = prompt('Enter password to continue:');
+    if (input === null) { document.body.innerHTML = ''; break; }
+    if (input === correct) { sessionStorage.setItem('canteen_auth', correct); break; }
+    attempts++;
+    if (attempts < 3) alert('Incorrect password. Try again.');
+    else { document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;">Access denied.</div>'; }
+  }
+})();
+</script>
 
 <div class="page-header">
   <div class="header-eyebrow">Financial model · 2-year lease · 4 partners</div>
