@@ -119,14 +119,10 @@
   </div>
 
   <div class="section-label" style="margin-top:1.5rem;">Variable costs — adjust to model scenarios</div>
-  <div class="sliders-grid">
+  <div class="sliders-grid one">
     <div class="slider-item">
       <label>Food cost % of revenue <span id="out-fc">40%</span></label>
       <input type="range" min="30" max="55" step="1" value="40" id="sl-fc" oninput="render()">
-    </div>
-    <div class="slider-item">
-      <label>Staff attrition &amp; temp replacement/month <span id="out-tmp">₹20,000</span></label>
-      <input type="range" min="0" max="50000" step="5000" value="20000" id="sl-tmp" oninput="render()">
     </div>
   </div>
 
@@ -170,11 +166,9 @@ function render() {
   const dailySales = +document.getElementById('sl-sales').value;
   const wps        = 45000;
   const fcPct      = +document.getElementById('sl-fc').value / 100;
-  const tmp        = +document.getElementById('sl-tmp').value;
 
   document.getElementById('out-sales').textContent = fmt(dailySales);
   document.getElementById('out-fc').textContent    = +document.getElementById('sl-fc').value + '%';
-  document.getElementById('out-tmp').textContent = fmt(tmp);
 
   const totalRev = dailySales * 30;
 
@@ -188,23 +182,21 @@ function render() {
     <div class="rh-item"><div class="rh-label">2-year revenue</div><div class="rh-val">${fmtL(totalRev*24)}</div></div>
   `;
 
-  // Fixed costs — actual from partner sheets
+  // Fixed costs
   const foodCost    = totalRev * fcPct;
-  const gst         = totalRev * 0.05;   // 5% GST on revenue
+  const gst         = totalRev * 0.05;
   const staffSal    = 625000;
   const rent        = 383500;
-  const utilities   = 100000;            // LPG + electricity + water combined
-  const hsk         = 20000;
-  const legalExp    = 5000;
-  const maintenance = 25000;             // realistic for commercial kitchen
+  const utilities   = 100000;
+  const maintenance = 25000;
   const miscOps     = 20000;
   const staffAccom  = 40000;
-  const stationery  = 5000;
+  const stationery  = 20000;
   const wasteMgmt   = 6000;
-  const packaging   = 30000;             // disposables, containers, carry bags
-  const accounting  = 15000;             // CA retainer + cloud POS/accounting software
-  const fixedOpex   = staffSal + rent + utilities + hsk + legalExp + maintenance + miscOps + staffAccom + stationery + wasteMgmt + packaging + accounting;
-  const varCost     = wps + tmp + gst;
+  const packaging   = 30000;
+  const accounting  = 15000;
+  const fixedOpex   = staffSal + rent + utilities + maintenance + miscOps + staffAccom + stationery + wasteMgmt + packaging + accounting;
+  const varCost     = wps + gst;
   const totalCost   = foodCost + fixedOpex + varCost;
   const profit      = totalRev - totalCost;
   const margin      = profit / totalRev * 100;
@@ -217,24 +209,20 @@ function render() {
     <div class="bar-row"><span class="bar-name">Profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.round(profit/totalRev*100))}%;background:${profit>=0?'#4a7c59':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
   `;
 
-  const vTag = `<span class="cost-badge">variable</span>`;
   document.getElementById('cost-list').innerHTML = `
     <div class="cost-item"><span class="ciname">Rent</span><span>${fmt(rent)}</span></div>
     <div class="cost-item"><span class="ciname">Food &amp; raw materials (${+document.getElementById('sl-fc').value}% of revenue)</span><span>${fmt(foodCost)}</span></div>
-    <div class="cost-item variable"><span class="ciname">GST — 5% of revenue ${vTag}</span><span>${fmt(gst)}</span></div>
+    <div class="cost-item"><span class="ciname">GST — 5% of revenue</span><span>${fmt(gst)}</span></div>
     <div class="cost-item"><span class="ciname">Staff salaries — 25 staff</span><span>${fmt(staffSal)}</span></div>
     <div class="cost-item"><span class="ciname">Working partner/manager salary</span><span>${fmt(wps)}</span></div>
     <div class="cost-item"><span class="ciname">Utilities (LPG + electricity + water)</span><span>${fmt(utilities)}</span></div>
     <div class="cost-item"><span class="ciname">Staff accommodation</span><span>${fmt(staffAccom)}</span></div>
     <div class="cost-item"><span class="ciname">Packaging &amp; disposables</span><span>${fmt(packaging)}</span></div>
-    <div class="cost-item"><span class="ciname">Housekeeping (HSK)</span><span>${fmt(hsk)}</span></div>
     <div class="cost-item"><span class="ciname">Equipment maintenance &amp; repairs</span><span>${fmt(maintenance)}</span></div>
     <div class="cost-item"><span class="ciname">Accounting, CA &amp; software</span><span>${fmt(accounting)}</span></div>
-    <div class="cost-item"><span class="ciname">Waste management</span><span>${fmt(wasteMgmt)}</span></div>
     <div class="cost-item"><span class="ciname">Stationery</span><span>${fmt(stationery)}</span></div>
-    <div class="cost-item"><span class="ciname">Legal expenses</span><span>${fmt(legalExp)}</span></div>
+    <div class="cost-item"><span class="ciname">Waste management</span><span>${fmt(wasteMgmt)}</span></div>
     <div class="cost-item"><span class="ciname">Miscellaneous</span><span>${fmt(miscOps)}</span></div>
-    <div class="cost-item variable"><span class="ciname">Staff attrition &amp; temp replacement ${vTag}</span><span>${fmt(tmp)}</span></div>
     <div class="cost-item"><span class="ciname">Total monthly costs</span><span>${fmt(totalCost)}</span></div>
   `;
 
