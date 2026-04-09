@@ -97,6 +97,16 @@
   .note { font-size: 12px; color: var(--muted); line-height: 1.7; padding: 0.85rem 1.25rem; background: var(--surface2); border-radius: 6px; border-left: 3px solid var(--border); margin-top: 1rem; }
   .note strong { color: var(--text); font-weight: 500; }
 
+  .partner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 0; }
+  @media (max-width: 600px) { .partner-grid { grid-template-columns: 1fr 1fr; } }
+  .partner-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.75rem 1rem; }
+  .partner-card.working-card { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); }
+  .pc-name { font-size: 13px; font-weight: 500; color: #e8f0eb; margin-bottom: 2px; }
+  .pc-role { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(232,240,235,0.55); margin-bottom: 8px; }
+  .pc-stats { display: flex; gap: 12px; }
+  .pc-stat .ps-val { font-size: 15px; font-weight: 500; color: #a8c5b0; line-height: 1; }
+  .pc-stat .ps-label { font-size: 10px; color: rgba(232,240,235,0.45); margin-top: 2px; }
+  .partner-section { background: var(--accent); padding: 1.25rem 2rem 1.5rem; }
   footer { text-align: center; font-size: 11px; color: var(--muted); padding: 1.5rem; border-top: 1px solid var(--border); letter-spacing: 0.05em; }
 </style>
 </head>
@@ -106,6 +116,51 @@
   <div class="header-eyebrow">Financial model · 2-year lease · 4 partners</div>
   <div class="header-title">Hospital Canteen<br><em>Calicut</em></div>
   <div class="header-sub">500-bed cooperative hospital · ₹3,83,500/month rent · ₹25L security deposit · Total capital ₹40L</div>
+</div>
+
+<div class="partner-section">
+  <div class="partner-grid">
+    <div class="partner-card working-card">
+      <div class="pc-name">Jayaraj</div>
+      <div class="pc-role">Working partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">30%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="pc-name">Devison</div>
+      <div class="pc-role">Passive partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">23.33%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="pc-name">Shaheel</div>
+      <div class="pc-role">Passive partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">23.33%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="pc-name">Nisar</div>
+      <div class="pc-role">Passive partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">23.33%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="container">
