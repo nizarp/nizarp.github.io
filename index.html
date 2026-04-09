@@ -118,22 +118,6 @@
 </style>
 </head>
 <body>
-<script>
-(function() {
-  const correct = 'kdch';
-  const stored = sessionStorage.getItem('canteen_auth');
-  if (stored === correct) return;
-  let attempts = 0;
-  while (attempts < 3) {
-    const input = prompt('Enter password to continue:');
-    if (input === null) { document.body.innerHTML = ''; break; }
-    if (input === correct) { sessionStorage.setItem('canteen_auth', correct); break; }
-    attempts++;
-    if (attempts < 3) alert('Incorrect password. Try again.');
-    else { document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;">Access denied.</div>'; }
-  }
-})();
-</script>
 
 <div class="page-header">
   <div class="header-eyebrow">Financial model · 2-year lease · 4 partners</div>
@@ -204,7 +188,33 @@
     </div>
   </div>
 
-  <div class="section-label" style="margin-top:1.5rem;">Monthly revenue</div>
+  <div class="section-label" style="margin-top:1.5rem;">Other monthly costs — adjust as needed</div>
+  <div class="sliders-grid">
+    <div class="slider-item">
+      <label>Packaging &amp; disposables <span id="out-pkg">₹30,000</span></label>
+      <input type="range" min="0" max="60000" step="5000" value="30000" id="sl-pkg" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Equipment maintenance &amp; repairs <span id="out-mnt">₹25,000</span></label>
+      <input type="range" min="0" max="60000" step="5000" value="25000" id="sl-mnt" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Accounting, CA &amp; software <span id="out-acc">₹15,000</span></label>
+      <input type="range" min="0" max="40000" step="5000" value="15000" id="sl-acc" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Stationery <span id="out-stn">₹20,000</span></label>
+      <input type="range" min="0" max="40000" step="5000" value="20000" id="sl-stn" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Waste management <span id="out-wst">₹6,000</span></label>
+      <input type="range" min="0" max="20000" step="1000" value="6000" id="sl-wst" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Miscellaneous <span id="out-msc">₹20,000</span></label>
+      <input type="range" min="0" max="50000" step="5000" value="20000" id="sl-msc" oninput="render()">
+    </div>
+  </div>
   <div class="revenue-hero" id="rev-hero"></div>
 
   <div class="section-label" style="margin-top:1.5rem;">Revenue vs costs</div>
@@ -247,6 +257,12 @@ function render() {
 
   document.getElementById('out-sales').textContent = fmt(dailySales);
   document.getElementById('out-fc').textContent    = +document.getElementById('sl-fc').value + '%';
+  document.getElementById('out-pkg').textContent   = fmt(+document.getElementById('sl-pkg').value);
+  document.getElementById('out-mnt').textContent   = fmt(+document.getElementById('sl-mnt').value);
+  document.getElementById('out-acc').textContent   = fmt(+document.getElementById('sl-acc').value);
+  document.getElementById('out-stn').textContent   = fmt(+document.getElementById('sl-stn').value);
+  document.getElementById('out-wst').textContent   = fmt(+document.getElementById('sl-wst').value);
+  document.getElementById('out-msc').textContent   = fmt(+document.getElementById('sl-msc').value);
 
   const totalRev = dailySales * 30;
 
@@ -266,13 +282,13 @@ function render() {
   const staffSal    = 625000;
   const rent        = 383500;
   const utilities   = 100000;
-  const maintenance = 25000;
-  const miscOps     = 20000;
   const staffAccom  = 40000;
-  const stationery  = 20000;
-  const wasteMgmt   = 6000;
-  const packaging   = 30000;
-  const accounting  = 15000;
+  const maintenance = +document.getElementById('sl-mnt').value;
+  const miscOps     = +document.getElementById('sl-msc').value;
+  const stationery  = +document.getElementById('sl-stn').value;
+  const wasteMgmt   = +document.getElementById('sl-wst').value;
+  const packaging   = +document.getElementById('sl-pkg').value;
+  const accounting  = +document.getElementById('sl-acc').value;
   const fixedOpex   = staffSal + rent + utilities + maintenance + miscOps + staffAccom + stationery + wasteMgmt + packaging + accounting;
   const varCost     = wps + gst;
   const totalCost   = foodCost + fixedOpex + varCost;
