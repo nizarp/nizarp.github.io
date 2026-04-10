@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Canteen — Financial Projections</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f4ee; --surface: #ffffff; --surface2: #f0ece3; --border: #ddd8cc;
+    --text: #1a1714; --muted: #7a756c; --accent: #2d4a3e; --accent2: #c4622d;
+    --profit: #2d5a3d; --loss: #8b2020;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-mono: 'DM Mono', 'Courier New', monospace;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: 13px; line-height: 1.6; min-height: 100vh; }
+
+  .page-header { background: var(--accent); color: #e8f0eb; padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
+  .page-header::after { content: ''; position: absolute; right: -60px; bottom: -60px; width: 220px; height: 220px; border-radius: 50%; border: 40px solid rgba(255,255,255,0.06); }
+  .header-eyebrow { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(232,240,235,0.6); margin-bottom: 0.5rem; }
+  .header-title { font-family: var(--font-display); font-size: 2.2rem; font-weight: 300; line-height: 1.1; margin-bottom: 0.4rem; }
+  .header-title em { font-style: italic; color: #a8c5b0; }
+  .header-sub { font-size: 12px; color: rgba(232,240,235,0.6); }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .section-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; }
+  .sliders-grid.one { grid-template-columns: 1fr; }
+  .sliders-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 640px) { .sliders-grid, .sliders-grid.three { grid-template-columns: 1fr; } }
+
+  .slider-item label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; font-size: 12px; color: var(--muted); }
+  .slider-item label span { font-size: 15px; font-weight: 500; color: var(--text); }
+  input[type=range] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border); border-radius: 2px; outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  .revenue-hero { background: var(--accent); border-radius: 10px; padding: 1.25rem 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem; }
+  .rh-item .rh-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(232,240,235,0.55); margin-bottom: 4px; }
+  .rh-item .rh-val { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: #e8f0eb; line-height: 1; }
+  .rh-item .rh-sub { font-size: 11px; color: rgba(232,240,235,0.5); margin-top: 3px; }
+  .rh-divider { width: 1px; background: rgba(255,255,255,0.15); align-self: stretch; }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; }
+  .card .clabel { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .card .cval { font-size: 1.4rem; font-family: var(--font-display); font-weight: 600; line-height: 1; margin-bottom: 4px; }
+  .card .csub { font-size: 11px; color: var(--muted); }
+  .card.profit .cval { color: var(--profit); }
+  .card.loss .cval { color: var(--loss); }
+
+  .cost-list { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .cost-item { display: flex; justify-content: space-between; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .cost-item:last-child { border-bottom: none; font-weight: 500; background: var(--surface2); }
+  .cost-item .ciname { color: var(--muted); }
+  .cost-item:last-child .ciname { color: var(--text); }
+  .cost-item.variable { background: #fdf6ee; }
+  .cost-item.variable .ciname { color: #8b5e1a; }
+  .cost-badge { font-size: 10px; background: #fae8cc; color: #8b5e1a; padding: 1px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+
+  .bar-section { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-name { font-size: 11px; color: var(--muted); width: 90px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .bar-amt { font-size: 12px; font-weight: 500; width: 80px; text-align: right; flex-shrink: 0; }
+
+  .twoyr-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; }
+  .twoyr-item .ti-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .twoyr-item .ti-val { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; line-height: 1; }
+  .twoyr-item .ti-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+  @media (max-width: 600px) { .share-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .share-grid > * { grid-column: span 1 !important; } }
+
+  .share-box { border-radius: 8px; padding: 1.25rem 1.5rem; }
+  .share-box.working { background: #e6f1fb; border: 1px solid #b5d4f4; }
+  .share-box.passive { background: #eaf3de; border: 1px solid #c0dd97; }
+  .share-box .sb-title { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.85rem; }
+  .share-box.working .sb-title { color: #185FA5; }
+  .share-box.passive .sb-title { color: #3b6d11; }
+  .share-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sm-item .sm-label { font-size: 11px; margin-bottom: 3px; }
+  .sm-item .sm-val { font-size: 1.15rem; font-weight: 500; line-height: 1; }
+  .sm-item .sm-sub { font-size: 11px; margin-top: 2px; }
+  .share-box.working .sm-label { color: #378ADD; }
+  .share-box.working .sm-val { color: #0C447C; }
+  .share-box.working .sm-sub { color: #378ADD; }
+  .share-box.passive .sm-label { color: #4a7c59; }
+  .share-box.passive .sm-val { color: #2d5a3d; }
+  .share-box.passive .sm-sub { color: #4a7c59; }
+
+  .divider { height: 1px; background: var(--border); margin: 2.5rem 0; }
+  .note { font-size: 12px; color: var(--muted); line-height: 1.7; padding: 0.85rem 1.25rem; background: var(--surface2); border-radius: 6px; border-left: 3px solid var(--border); margin-top: 1rem; }
+  .note strong { color: var(--text); font-weight: 500; }
+
+  .partner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 0; }
+  .partner-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.75rem 1rem; }
+  .partner-card.working-card { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); }
+  .pc-name { font-size: 13px; font-weight: 500; color: #e8f0eb; margin-bottom: 2px; }
+  .pc-role { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(232,240,235,0.55); margin-bottom: 8px; }
+  .pc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+  .pc-stat .ps-val { font-size: 13px; font-weight: 500; color: #a8c5b0; line-height: 1; }
+  .pc-stat .ps-label { font-size: 10px; color: rgba(232,240,235,0.45); margin-top: 2px; }
+  .partner-section { background: var(--accent); padding: 1.25rem 1.5rem 1.5rem; }
+  @media (max-width: 700px) {
+    .partner-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .partner-section { padding: 1rem; }
+  }
+  @media (max-width: 400px) {
+    .partner-grid { grid-template-columns: 1fr; }
+    .pc-stats { grid-template-columns: repeat(4, 1fr); }
+  }
+  footer { text-align: center; font-size: 11px; color: var(--muted); padding: 1.5rem; border-top: 1px solid var(--border); letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-eyebrow">Financial model v2 · 2-year lease · 30/30/20/20 structure</div>
+  <div class="header-title">Hospital Canteen<br><em>Calicut</em></div>
+  <div class="header-sub">500-bed cooperative hospital · ₹3,83,500/month rent · ₹25L security deposit · Total capital ₹40L</div>
+</div>
+
+<div class="partner-section">
+  <div class="partner-grid">
+    <div class="partner-card working-card">
+      <div class="pc-name">Jayaraj</div>
+      <div class="pc-role">Working manager</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">30%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹45k</div><div class="ps-label">Salary/mo</div></div>
+      </div>
+    </div>
+    <div class="partner-card working-card">
+      <div class="pc-name">Devison</div>
+      <div class="pc-role">Active partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">30%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="pc-name">Shaheel</div>
+      <div class="pc-role">Passive partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">20%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="pc-name">Nisar</div>
+      <div class="pc-role">Passive partner</div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="ps-val">20%</div><div class="ps-label">Ownership</div></div>
+        <div class="pc-stat"><div class="ps-val">₹10L</div><div class="ps-label">Capital</div></div>
+        <div class="pc-stat"><div class="ps-val">₹6.25L</div><div class="ps-label">Deposit</div></div>
+        <div class="pc-stat"><div class="ps-val">₹3.75L</div><div class="ps-label">Working cap</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section-label">Average daily sales</div>
+  <div class="sliders-grid one">
+    <div class="slider-item">
+      <label>Avg daily sales <span id="out-sales">₹80,000</span></label>
+      <input type="range" min="50000" max="250000" step="5000" value="80000" id="sl-sales" oninput="render()">
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Variable costs — adjust to model scenarios</div>
+  <div class="sliders-grid one">
+    <div class="slider-item">
+      <label>Food cost % of revenue <span id="out-fc">40%</span></label>
+      <input type="range" min="30" max="55" step="1" value="40" id="sl-fc" oninput="render()">
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Other monthly costs — adjust as needed</div>
+  <div class="sliders-grid">
+    <div class="slider-item">
+      <label>Packaging &amp; disposables <span id="out-pkg">₹30,000</span></label>
+      <input type="range" min="0" max="60000" step="5000" value="30000" id="sl-pkg" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Equipment maintenance &amp; repairs <span id="out-mnt">₹25,000</span></label>
+      <input type="range" min="0" max="60000" step="5000" value="25000" id="sl-mnt" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Accounting, CA &amp; software <span id="out-acc">₹5,000</span></label>
+      <input type="range" min="0" max="40000" step="5000" value="5000" id="sl-acc" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Stationery <span id="out-stn">₹20,000</span></label>
+      <input type="range" min="0" max="40000" step="5000" value="20000" id="sl-stn" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Waste management <span id="out-wst">₹6,000</span></label>
+      <input type="range" min="0" max="20000" step="1000" value="6000" id="sl-wst" oninput="render()">
+    </div>
+    <div class="slider-item">
+      <label>Miscellaneous <span id="out-msc">₹20,000</span></label>
+      <input type="range" min="0" max="50000" step="5000" value="20000" id="sl-msc" oninput="render()">
+    </div>
+  </div>
+  <div class="revenue-hero" id="rev-hero"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Monthly costs</div>
+  <div class="cost-list" id="cost-list"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Revenue vs costs</div>
+  <div class="bar-section" id="bar-section"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Monthly P&amp;L</div>
+  <div class="cards-grid" id="pnl-cards"></div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">2-year outlook — partnership</div>
+  <div class="twoyr-box" id="twoyr"></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Profit distribution</div>
+  <div class="share-grid" id="share-grid"></div>
+
+</div>
+
+<footer id="footer-bar">Calicut Hospital Canteen · Financial Projections · 2-year lease</footer>
+
+<script>
+const fmt  = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmtL = n => { const l = n/100000; return (l>=0?'':'-')+'₹'+Math.abs(l).toFixed(2)+'L'; };
+const fmtK = n => {
+  const abs = Math.abs(n);
+  const sign = n >= 0 ? '' : '-';
+  if (abs >= 100000) { return sign + '₹' + (abs/100000).toFixed(2) + 'L'; }
+  return sign + '₹' + (abs/1000).toFixed(2) + 'k';
+};
+
+function render() {
+  const dailySales = +document.getElementById('sl-sales').value;
+  const wps        = 45000;
+  const fcPct      = +document.getElementById('sl-fc').value / 100;
+
+  document.getElementById('out-sales').textContent = fmt(dailySales);
+  document.getElementById('out-fc').textContent    = +document.getElementById('sl-fc').value + '%';
+  document.getElementById('out-pkg').textContent   = fmt(+document.getElementById('sl-pkg').value);
+  document.getElementById('out-mnt').textContent   = fmt(+document.getElementById('sl-mnt').value);
+  document.getElementById('out-acc').textContent   = fmt(+document.getElementById('sl-acc').value);
+  document.getElementById('out-stn').textContent   = fmt(+document.getElementById('sl-stn').value);
+  document.getElementById('out-wst').textContent   = fmt(+document.getElementById('sl-wst').value);
+  document.getElementById('out-msc').textContent   = fmt(+document.getElementById('sl-msc').value);
+
+  const totalRev = dailySales * 30;
+
+  document.getElementById('rev-hero').innerHTML = `
+    <div class="rh-item"><div class="rh-label">Daily sales</div><div class="rh-val">${fmt(dailySales)}</div></div>
+    <div class="rh-divider"></div>
+    <div class="rh-item"><div class="rh-label">Monthly revenue</div><div class="rh-val">${fmtL(totalRev)}</div></div>
+    <div class="rh-divider"></div>
+    <div class="rh-item"><div class="rh-label">Annual revenue</div><div class="rh-val">${fmtL(totalRev*12)}</div></div>
+    <div class="rh-divider"></div>
+    <div class="rh-item"><div class="rh-label">2-year revenue</div><div class="rh-val">${fmtL(totalRev*24)}</div></div>
+  `;
+
+  // Fixed costs
+  const foodCost    = totalRev * fcPct;
+  const gst         = totalRev * 0.05;
+  const staffSal    = 625000;
+  const rent        = 383500;
+  const utilities   = 100000;
+  const staffAccom  = 40000;
+  const maintenance = +document.getElementById('sl-mnt').value;
+  const miscOps     = +document.getElementById('sl-msc').value;
+  const stationery  = +document.getElementById('sl-stn').value;
+  const wasteMgmt   = +document.getElementById('sl-wst').value;
+  const packaging   = +document.getElementById('sl-pkg').value;
+  const accounting  = +document.getElementById('sl-acc').value;
+  const fixedOpex   = staffSal + rent + utilities + maintenance + miscOps + staffAccom + stationery + wasteMgmt + packaging + accounting;
+  const varCost     = wps + gst;
+  const totalCost   = foodCost + fixedOpex + varCost;
+  const profit      = totalRev - totalCost;
+  const margin      = profit / totalRev * 100;
+
+  const grossProfit = totalRev - foodCost;
+  const totalOpex   = fixedOpex + varCost;
+
+  document.getElementById('bar-section').innerHTML = `
+    <div class="bar-row"><span class="bar-name">Revenue</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#2d4a3e;"></div></div><span class="bar-amt">${fmtL(totalRev)}</span></div>
+    <div class="bar-row"><span class="bar-name">Food cost</span><div class="bar-track"><div class="bar-fill" style="width:${(foodCost/totalRev*100).toFixed(2)}%;background:#c4622d;"></div></div><span class="bar-amt">${fmtL(foodCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Opex</span><div class="bar-track"><div class="bar-fill" style="width:${((fixedOpex+varCost)/totalRev*100).toFixed(2)}%;background:#8b6a4a;"></div></div><span class="bar-amt">${fmtL(fixedOpex+varCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Total cost</span><div class="bar-track"><div class="bar-fill" style="width:${(totalCost/totalRev*100).toFixed(2)}%;background:#BA7517;"></div></div><span class="bar-amt">${fmtL(totalCost)}</span></div>
+    <div class="bar-row"><span class="bar-name">Net profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,(profit/totalRev*100)).toFixed(2)}%;background:${profit>=0?'#2d5a3d':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
+  `;
+
+  document.getElementById('cost-list').innerHTML = `
+    <div class="cost-item"><span class="ciname">Rent</span><span>${fmt(rent)}</span></div>
+    <div class="cost-item"><span class="ciname">Food &amp; raw materials (${+document.getElementById('sl-fc').value}% of revenue)</span><span>${fmt(foodCost)}</span></div>
+    <div class="cost-item"><span class="ciname">GST — 5% of revenue</span><span>${fmt(gst)}</span></div>
+    <div class="cost-item"><span class="ciname">Staff salaries — 25 staff</span><span>${fmt(staffSal)}</span></div>
+    <div class="cost-item"><span class="ciname">Working partner/manager salary</span><span>${fmt(wps)}</span></div>
+    <div class="cost-item"><span class="ciname">Utilities (LPG + electricity + water)</span><span>${fmt(utilities)}</span></div>
+    <div class="cost-item"><span class="ciname">Staff accommodation</span><span>${fmt(staffAccom)}</span></div>
+    <div class="cost-item"><span class="ciname">Packaging &amp; disposables</span><span>${fmt(packaging)}</span></div>
+    <div class="cost-item"><span class="ciname">Equipment maintenance &amp; repairs</span><span>${fmt(maintenance)}</span></div>
+    <div class="cost-item"><span class="ciname">Accounting, CA &amp; software</span><span>${fmt(accounting)}</span></div>
+    <div class="cost-item"><span class="ciname">Stationery</span><span>${fmt(stationery)}</span></div>
+    <div class="cost-item"><span class="ciname">Waste management</span><span>${fmt(wasteMgmt)}</span></div>
+    <div class="cost-item"><span class="ciname">Miscellaneous</span><span>${fmt(miscOps)}</span></div>
+    <div class="cost-item"><span class="ciname">Total monthly costs</span><span>${fmt(totalCost)}</span></div>
+  `;
+
+  const pClass = profit >= 0 ? 'profit' : 'loss';
+  document.getElementById('pnl-cards').innerHTML = `
+    <div class="card"><div class="clabel">Monthly revenue</div><div class="cval">${fmtL(totalRev)}</div></div>
+    <div class="card"><div class="clabel">Total cost</div><div class="cval">${fmtL(totalCost)}</div><div class="csub">${(totalCost/totalRev*100).toFixed(2)}% of revenue</div></div>
+    <div class="card ${pClass}"><div class="clabel">Net profit</div><div class="cval">${fmtL(profit)}</div><div class="csub">${margin.toFixed(2)}% net margin</div></div>
+  `;
+
+  // 2-year partnership
+  const profit2yr    = profit * 24;
+  const revenue2yr   = totalRev * 24;
+  const grossProfit2yr = grossProfit * 24;
+  const deposit      = 2500000;
+  const breakEven    = profit > 0 ? Math.ceil(deposit / profit) : null;
+
+  document.getElementById('twoyr').innerHTML = `
+    <div class="twoyr-item"><div class="ti-label">2-yr gross revenue</div><div class="ti-val">${fmtL(revenue2yr)}</div><div class="ti-sub">total sales over 24 months</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr gross profit</div><div class="ti-val" style="color:${grossProfit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(grossProfit2yr)}</div><div class="ti-sub">before all opex</div></div>
+    <div class="twoyr-item"><div class="ti-label">2-yr net profit</div><div class="ti-val" style="color:${profit2yr>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit2yr)}</div><div class="ti-sub">after all costs</div></div>
+    <div class="twoyr-item"><div class="ti-label">Break-even</div><div class="ti-val">${breakEven ? breakEven + ' mo' : '—'}</div><div class="ti-sub">to recover ₹25L deposit</div></div>
+  `;
+
+  // Profit distribution — 30/30/20/20
+  const jayarajShare   = profit * 0.30;  // + salary
+  const devisonShare   = profit * 0.30;
+  const passiveShare   = profit * 0.20;  // Shaheel and Nisar each
+
+  const jayaraj2yr     = jayarajShare * 24;
+  const devison2yr     = devisonShare * 24;
+  const passive2yr     = passiveShare * 24;
+
+  const jayarajROI     = ((jayaraj2yr / 1000000) * 100).toFixed(0);
+  const devisonROI     = ((devison2yr / 1000000) * 100).toFixed(0);
+  const passiveROI     = ((passive2yr / 1000000) * 100).toFixed(0);
+
+  const col = v => v >= 0 ? 'var(--profit)' : 'var(--loss)';
+  const shareLabel = v => v >= 0 ? 'Ownership share/month' : 'Loss contribution/month';
+  const yrLabel    = v => v >= 0 ? '2-yr distributions' : '2-yr loss exposure';
+  const roiLabel   = v => v >= 0 ? 'ROI on ₹10L' : 'Net loss on ₹10L';
+
+  document.getElementById('share-grid').innerHTML = `
+    <div class="share-box working" style="grid-column: span 1;">
+      <div class="sb-title">Jayaraj — working manager · 30%</div>
+      <div class="share-metrics">
+        <div class="sm-item">
+          <div class="sm-label">Fixed salary/month</div>
+          <div class="sm-val">${fmtK(wps)}</div>
+          <div class="sm-sub">deducted as cost</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${shareLabel(jayarajShare)}</div>
+          <div class="sm-val" style="color:${col(jayarajShare)}">${fmtK(jayarajShare)}</div>
+          <div class="sm-sub">30% of net ${profit >= 0 ? 'profit' : 'loss'}</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">Total income/month</div>
+          <div class="sm-val" style="color:${col(jayarajShare)}">${fmtK(jayarajShare + wps)}</div>
+          <div class="sm-sub">salary + share</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${yrLabel(jayaraj2yr)}</div>
+          <div class="sm-val" style="color:${col(jayaraj2yr)}">${fmtL(jayaraj2yr)}</div>
+          <div class="sm-sub">excl. salary</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">Deposit refund at exit</div>
+          <div class="sm-val">₹6.25L</div>
+          <div class="sm-sub">equal share of ₹25L</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${roiLabel(jayaraj2yr)}</div>
+          <div class="sm-val" style="color:${col(jayaraj2yr)}">${jayarajROI}%</div>
+          <div class="sm-sub">over 2 years</div>
+        </div>
+      </div>
+    </div>
+    <div class="share-box working" style="grid-column: span 1;">
+      <div class="sb-title">Devison — active partner · 30%</div>
+      <div class="share-metrics">
+        <div class="sm-item">
+          <div class="sm-label">${shareLabel(devisonShare)}</div>
+          <div class="sm-val" style="color:${col(devisonShare)}">${fmtK(devisonShare)}</div>
+          <div class="sm-sub">30% of net ${profit >= 0 ? 'profit' : 'loss'}</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${yrLabel(devison2yr)}</div>
+          <div class="sm-val" style="color:${col(devison2yr)}">${fmtL(devison2yr)}</div>
+          <div class="sm-sub">over 24 months</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">Deposit refund at exit</div>
+          <div class="sm-val">₹6.25L</div>
+          <div class="sm-sub">equal share of ₹25L</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${roiLabel(devison2yr)}</div>
+          <div class="sm-val" style="color:${col(devison2yr)}">${devisonROI}%</div>
+          <div class="sm-sub">over 2 years</div>
+        </div>
+      </div>
+    </div>
+    <div class="share-box passive" style="grid-column: span 2;">
+      <div class="sb-title">Shaheel &amp; Nisar — passive partners · 20% each</div>
+      <div class="share-metrics">
+        <div class="sm-item">
+          <div class="sm-label">${shareLabel(passiveShare)}</div>
+          <div class="sm-val" style="color:${col(passiveShare)}">${fmtK(passiveShare)}</div>
+          <div class="sm-sub">20% of net ${profit >= 0 ? 'profit' : 'loss'}</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${yrLabel(passive2yr)}</div>
+          <div class="sm-val" style="color:${col(passive2yr)}">${fmtL(passive2yr)}</div>
+          <div class="sm-sub">per passive partner</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">Deposit refund at exit</div>
+          <div class="sm-val">₹6.25L</div>
+          <div class="sm-sub">equal share of ₹25L</div>
+        </div>
+        <div class="sm-item">
+          <div class="sm-label">${roiLabel(passive2yr)}</div>
+          <div class="sm-val" style="color:${col(passive2yr)}">${passiveROI}%</div>
+          <div class="sm-sub">over 2 years</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('footer-bar').textContent =
+    `Calicut Hospital Canteen · Daily sales: ${fmt(dailySales)} · Food cost: ${+document.getElementById('sl-fc').value}% · WP/Mgr salary: ${fmt(wps)}`;
+}
+
+render();
+</script>
+</body>
+</html>
