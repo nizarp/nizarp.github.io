@@ -262,7 +262,7 @@
       <input type="range" min="20" max="55" step="1" value="40" id="sl-fcop" oninput="render()">
     </div>
     <div class="slider-item">
-      <label>Food cost — staff % (of full price) <span id="out-fcst">50%</span></label>
+      <label>Food cost — staff % <span id="out-fcst">50%</span></label>
       <input type="range" min="30" max="70" step="1" value="50" id="sl-fcst" oninput="render()">
     </div>
   </div>
@@ -435,7 +435,7 @@ function render() {
     <div class="cost-item sub"><span class="ciname">Breakfast: ${opB} covers × ₹${bP} × ${+document.getElementById('sl-fcop').value}%</span><span>${fmt(opB*bP*30*fcOP)}</span></div>
     <div class="cost-item sub"><span class="ciname">Lunch: ${opL} covers × ₹${lP} × ${+document.getElementById('sl-fcop').value}%</span><span>${fmt(opL*lP*30*fcOP)}</span></div>
     <div class="cost-item sub"><span class="ciname">Dinner: ${opD} covers × ₹${dP} × ${+document.getElementById('sl-fcop').value}%</span><span>${fmt(opD*dP*30*fcOP)}</span></div>
-    <div class="cost-item section-head"><span class="ciname">Food cost — staff (${+document.getElementById('sl-fcst').value}% of full price)</span><span>${fmt(fcMonST)}</span></div>
+    <div class="cost-item section-head"><span class="ciname">Food cost — staff (${+document.getElementById('sl-fcst').value}%</span><span>${fmt(fcMonST)}</span></div>
     <div class="cost-item sub"><span class="ciname">Breakfast: ${stB} covers × ₹${bP} × ${+document.getElementById('sl-fcst').value}%</span><span>${fmt(stB*bP*30*fcST)}</span></div>
     <div class="cost-item sub"><span class="ciname">Lunch: ${stL} covers × ₹${lP} × ${+document.getElementById('sl-fcst').value}%</span><span>${fmt(stL*lP*30*fcST)}</span></div>
     <div class="cost-item sub"><span class="ciname">Dinner: ${stD} covers × ₹${dP} × ${+document.getElementById('sl-fcst').value}%</span><span>${fmt(stD*dP*30*fcST)}</span></div>
