@@ -255,15 +255,15 @@
   <div class="sliders-grid">
     <div class="slider-item">
       <label>Food cost — in-patient % <span id="out-fcip">50%</span></label>
-      <input type="range" min="20" max="55" step="1" value="50" id="sl-fcip" oninput="render()">
+      <input type="range" min="20" max="70" step="1" value="50" id="sl-fcip" oninput="render()">
     </div>
     <div class="slider-item">
       <label>Food cost — out-patient/visitor % <span id="out-fcop">40%</span></label>
-      <input type="range" min="20" max="55" step="1" value="40" id="sl-fcop" oninput="render()">
+      <input type="range" min="20" max="70" step="1" value="40" id="sl-fcop" oninput="render()">
     </div>
     <div class="slider-item">
       <label>Food cost — staff % <span id="out-fcst">50%</span></label>
-      <input type="range" min="30" max="70" step="1" value="50" id="sl-fcst" oninput="render()">
+      <input type="range" min="20" max="70" step="1" value="50" id="sl-fcst" oninput="render()">
     </div>
   </div>
 
@@ -464,9 +464,9 @@ function render() {
   document.getElementById('bar-section').innerHTML = `
     <div class="bar-row"><span class="bar-name">Revenue</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#2d4a3e;"></div></div><span class="bar-amt">${fmtL(totalRev)}</span></div>
     <div class="bar-row"><span class="bar-name">Food cost</span><div class="bar-track"><div class="bar-fill" style="width:${(totalFC/totalRev*100).toFixed(2)}%;background:#c4622d;"></div></div><span class="bar-amt">${fmtL(totalFC)}</span></div>
-    <div class="bar-row bar-indent"><span class="bar-name">In-patient GP</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,gpIP/totalRev*100).toFixed(2)}%;background:#378ADD;"></div></div><span class="bar-amt" style="color:#185FA5">${fmtL(gpIP)}</span></div>
-    <div class="bar-row bar-indent"><span class="bar-name">Out-patient GP</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,gpOP/totalRev*100).toFixed(2)}%;background:#BA7517;"></div></div><span class="bar-amt" style="color:#854F0B">${fmtL(gpOP)}</span></div>
-    <div class="bar-row bar-indent"><span class="bar-name">Staff GP</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,gpST/totalRev*100).toFixed(2)}%;background:#3b6d11;"></div></div><span class="bar-amt" style="color:#3b6d11">${fmtL(gpST)}</span></div>
+    <div class="bar-row bar-indent"><span class="bar-name">In-patient FC</span><div class="bar-track"><div class="bar-fill" style="width:${(fcMonIP/totalRev*100).toFixed(2)}%;background:#378ADD;"></div></div><span class="bar-amt" style="color:#185FA5">${fmtL(fcMonIP)}</span></div>
+    <div class="bar-row bar-indent"><span class="bar-name">Out-patient FC</span><div class="bar-track"><div class="bar-fill" style="width:${(fcMonOP/totalRev*100).toFixed(2)}%;background:#BA7517;"></div></div><span class="bar-amt" style="color:#854F0B">${fmtL(fcMonOP)}</span></div>
+    <div class="bar-row bar-indent"><span class="bar-name">Staff FC</span><div class="bar-track"><div class="bar-fill" style="width:${(fcMonST/totalRev*100).toFixed(2)}%;background:#3b6d11;"></div></div><span class="bar-amt" style="color:#3b6d11">${fmtL(fcMonST)}</span></div>
     <div class="bar-row"><span class="bar-name">Opex</span><div class="bar-track"><div class="bar-fill" style="width:${((fixedOpex+gst)/totalRev*100).toFixed(2)}%;background:#8b6a4a;"></div></div><span class="bar-amt">${fmtL(fixedOpex+gst)}</span></div>
     <div class="bar-row"><span class="bar-name">Total cost</span><div class="bar-track"><div class="bar-fill" style="width:${(totalCost/totalRev*100).toFixed(2)}%;background:#BA7517;"></div></div><span class="bar-amt">${fmtL(totalCost)}</span></div>
     <div class="bar-row"><span class="bar-name">Net profit</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,profit/totalRev*100).toFixed(2)}%;background:${profit>=0?'#2d5a3d':'#8b2020'};"></div></div><span class="bar-amt" style="color:${profit>=0?'var(--profit)':'var(--loss)'}">${fmtL(profit)}</span></div>
