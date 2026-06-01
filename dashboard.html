@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KDCH Canteen — Sales Insights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#f6f1e7;
+    --paper-2:#fffdf8;
+    --ink:#211c15;
+    --ink-soft:#6a6052;
+    --line:#e3dac8;
+    --saffron:#e08b2b;
+    --terra:#c0492f;
+    --sage:#4f7a5e;
+    --plum:#7a4b63;
+    --gold:#caa24a;
+    --shadow:0 1px 2px rgba(33,28,21,.05),0 8px 28px rgba(33,28,21,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Hanken Grotesk',sans-serif;
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(224,139,43,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(79,122,94,.08), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(18px,4vw,56px) clamp(14px,4vw,40px) 64px;
+  }
+  .wrap{max-width:1120px;margin:0 auto}
+
+  /* Header */
+  header{margin-bottom:40px;border-bottom:1.5px solid var(--ink);padding-bottom:24px}
+  .eyebrow{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);font-weight:700;margin-bottom:10px}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,62px);line-height:.98;letter-spacing:-.02em}
+  h1 em{font-style:italic;font-weight:500;color:var(--saffron)}
+  .sub{margin-top:14px;color:var(--ink-soft);font-size:15.5px;max-width:60ch}
+  .sub b{color:var(--ink);font-weight:600}
+
+  /* KPI strip */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:26px;box-shadow:var(--shadow)}
+  .kpi{background:var(--paper-2);padding:18px 18px 16px}
+  .kpi .lab{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .kpi .val{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,2.6vw,30px);margin-top:6px;letter-spacing:-.01em}
+  .kpi .note{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+  /* Sections */
+  section{margin-top:48px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .sec-num{font-family:'Fraunces',serif;font-style:italic;font-weight:500;color:var(--saffron);font-size:24px;line-height:1}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
+  .sec-sub{color:var(--ink-soft);font-size:14.5px;margin:4px 0 22px;max-width:72ch}
+
+  .card{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:22px 22px 18px;box-shadow:var(--shadow)}
+  .chart-box{position:relative;height:340px}
+  .chart-box.tall{height:380px}
+
+  .grid-2{display:grid;grid-template-columns:1.45fr 1fr;gap:20px}
+  .grid-2b{display:grid;grid-template-columns:1fr 1.3fr;gap:20px}
+
+  /* weekday vs weekend stat blocks */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .vsbox{border-radius:14px;padding:18px;border:1px solid var(--line)}
+  .vsbox.wd{background:linear-gradient(160deg,#fff,#fdf6ea)}
+  .vsbox.we{background:linear-gradient(160deg,#fff,#eef4ef)}
+  .vsbox .tag{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .wd .tag{color:var(--saffron)} .we .tag{color:var(--sage)}
+  .vsbox .big{font-family:'Fraunces',serif;font-weight:600;font-size:30px;margin-top:8px;line-height:1}
+  .vsbox .smol{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+  .delta{display:inline-block;margin-top:12px;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(192,73,47,.12);color:var(--terra)}
+
+  /* meal cards */
+  .meal-list{display:flex;flex-direction:column;gap:10px}
+  .meal-row{display:grid;grid-template-columns:14px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper-2)}
+  .dot{width:13px;height:13px;border-radius:50%}
+  .meal-row .name{font-weight:600;font-size:15px}
+  .meal-row .win{font-size:12px;color:var(--ink-soft)}
+  .meal-row .pct{font-family:'Fraunces',serif;font-size:22px;font-weight:600;text-align:right;line-height:1}
+  .meal-row .rev{font-size:12px;color:var(--ink-soft);text-align:right}
+
+  .insight{margin-top:16px;padding:14px 16px;border-left:3px solid var(--saffron);background:rgba(224,139,43,.07);border-radius:0 10px 10px 0;font-size:14px;color:#4d4434}
+  .insight b{color:var(--ink)}
+
+  footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media(max-width:860px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .kpi:last-child{grid-column:1/-1}
+    .grid-2,.grid-2b{grid-template-columns:1fr}
+    .chart-box{height:300px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Monthly Sales Report · KDCH Canteen</div>
+    <h1>What the kitchen <em>actually</em> sells</h1>
+    <p class="sub">A read on <b>22,922 orders</b> from <b>2 May – 1 Jun 2026</b> (31 days). All figures in Indian Rupees, based on <b>net sales</b> after discount.</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Total net sales</div><div class="val">₹20.6L</div><div class="note">₹20,62,649</div></div>
+      <div class="kpi"><div class="lab">Total orders</div><div class="val">22,922</div><div class="note">~739 / day</div></div>
+      <div class="kpi"><div class="lab">Avg order value</div><div class="val">₹90</div><div class="note">net per bill</div></div>
+      <div class="kpi"><div class="lab">Avg daily sales</div><div class="val">₹66,537</div><div class="note">across 31 days</div></div>
+      <div class="kpi"><div class="lab">Busiest hour</div><div class="val">1 PM</div><div class="note">₹13,700 / day avg</div></div>
+    </div>
+  </header>
+
+  <!-- 1. HOURLY -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Sales by hour of day</h2></div>
+    <p class="sec-sub">Average sales generated in each clock-hour on a typical day (total for that hour ÷ 31 days). The line shows average number of orders, so you can see where the queue forms.</p>
+    <div class="card">
+      <div class="chart-box tall"><canvas id="hourChart"></canvas></div>
+      <div class="insight">The day has a clear <b>twin-peak shape</b>: a long breakfast build from 7–10 AM, then a sharp <b>1 PM lunch spike (~₹13.7k/day)</b> that alone is bigger than the entire dinner service. After 3 PM trade tapers steadily; past 8 PM it's negligible.</div>
+    </div>
+  </section>
+
+  <!-- 2. WEEKDAY vs WEEKEND -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Weekday vs weekend</h2></div>
+    <p class="sec-sub">Weekend = Saturday &amp; Sunday. Comparing on an <b>average-per-day</b> basis (not totals), since the month had 21 weekdays and 10 weekend days.</p>
+    <div class="grid-2b">
+      <div class="card">
+        <div class="vs">
+          <div class="vsbox wd">
+            <div class="tag">Weekday</div>
+            <div class="big">₹74,186</div>
+            <div class="smol">avg sales / day · 805 orders · ₹92.1 avg bill</div>
+          </div>
+          <div class="vsbox we">
+            <div class="tag">Weekend</div>
+            <div class="big">₹50,474</div>
+            <div class="smol">avg sales / day · 602 orders · ₹83.9 avg bill</div>
+          </div>
+        </div>
+        <span class="delta">Weekends run ~32% lighter per day</span>
+        <div class="insight" style="margin-top:14px">Consistent with a <b>hospital / workplace canteen</b> pattern — weekday office and OPD footfall drops on weekends, and the average bill shrinks too (₹92 → ₹84), suggesting fewer full meals and more snacks.</div>
+      </div>
+      <div class="card">
+        <div class="chart-box"><canvas id="dowChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MEAL PERIODS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Share of sales by meal period</h2></div>
+    <p class="sec-sub">Orders bucketed by time of day: Breakfast 6–11 AM · Lunch 11 AM–3 PM · Tea/Snacks 3–7 PM · Dinner after 7 PM.</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-box"><canvas id="mealChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="meal-list" id="mealList"></div>
+        <div class="insight"><b>Lunch is the business</b> — half of all revenue (₹10.4L) and the richest basket (₹113 avg bill). Breakfast brings the most footfall but cheaper tickets. Dinner is barely 4% — worth deciding whether it earns its keep.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BONUS: daily trend -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Daily sales through the month</h2></div>
+    <p class="sec-sub">Bonus view — net sales each day. Orange bars are weekdays, green are weekends.</p>
+    <div class="card">
+      <div class="chart-box"><canvas id="dailyChart"></canvas></div>
+      <div class="insight">A steady weekday rhythm of ₹70–80k with regular weekend dips. The <b>6 May outlier (₹1.19L)</b> stands out — worth checking whether it was a bulk/event order.</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>KDCH Canteen · POS export “KDCh_All_orders” · 22,922 successful orders (99.99% Dine-In)</span>
+    <span>Payment mix: Cash 56% · UPI 44% of value</span>
+  </footer>
+</div>
+
+<script>
+const DATA = {
+ "summary": {
+  "total_sales": 2062649,
+  "total_orders": 22922,
+  "avg_order": 90.0,
+  "n_days": 31,
+  "avg_daily_sales": 66537,
+  "avg_daily_orders": 739,
+  "date_from": "2026-05-02",
+  "date_to": "2026-06-01"
+ },
+ "hourly": [
+  {
+   "hour": 6,
+   "total_sales": 2930,
+   "avg_sales_per_day": 95,
+   "orders": 52,
+   "avg_orders_per_day": 1.7,
+   "avg_order_value": 56.3
+  },
+  {
+   "hour": 7,
+   "total_sales": 113311,
+   "avg_sales_per_day": 3655,
+   "orders": 1568,
+   "avg_orders_per_day": 50.6,
+   "avg_order_value": 72.3
+  },
+  {
+   "hour": 8,
+   "total_sales": 165155,
+   "avg_sales_per_day": 5328,
+   "orders": 2181,
+   "avg_orders_per_day": 70.4,
+   "avg_order_value": 75.7
+  },
+  {
+   "hour": 9,
+   "total_sales": 135689,
+   "avg_sales_per_day": 4377,
+   "orders": 1820,
+   "avg_orders_per_day": 58.7,
+   "avg_order_value": 74.6
+  },
+  {
+   "hour": 10,
+   "total_sales": 137513,
+   "avg_sales_per_day": 4436,
+   "orders": 1988,
+   "avg_orders_per_day": 64.1,
+   "avg_order_value": 69.2
+  },
+  {
+   "hour": 11,
+   "total_sales": 134163,
+   "avg_sales_per_day": 4328,
+   "orders": 1974,
+   "avg_orders_per_day": 63.7,
+   "avg_order_value": 68.0
+  },
+  {
+   "hour": 12,
+   "total_sales": 205243,
+   "avg_sales_per_day": 6621,
+   "orders": 1871,
+   "avg_orders_per_day": 60.4,
+   "avg_order_value": 109.7
+  },
+  {
+   "hour": 13,
+   "total_sales": 424704,
+   "avg_sales_per_day": 13700,
+   "orders": 3159,
+   "avg_orders_per_day": 101.9,
+   "avg_order_value": 134.4
+  },
+  {
+   "hour": 14,
+   "total_sales": 278379,
+   "avg_sales_per_day": 8980,
+   "orders": 2218,
+   "avg_orders_per_day": 71.5,
+   "avg_order_value": 125.5
+  },
+  {
+   "hour": 15,
+   "total_sales": 111948,
+   "avg_sales_per_day": 3611,
+   "orders": 1168,
+   "avg_orders_per_day": 37.7,
+   "avg_order_value": 95.8
+  },
+  {
+   "hour": 16,
+   "total_sales": 116698,
+   "avg_sales_per_day": 3764,
+   "orders": 1443,
+   "avg_orders_per_day": 46.5,
+   "avg_order_value": 80.9
+  },
+  {
+   "hour": 17,
+   "total_sales": 85331,
+   "avg_sales_per_day": 2753,
+   "orders": 1348,
+   "avg_orders_per_day": 43.5,
+   "avg_order_value": 63.3
+  },
+  {
+   "hour": 18,
+   "total_sales": 70396,
+   "avg_sales_per_day": 2271,
+   "orders": 1075,
+   "avg_orders_per_day": 34.7,
+   "avg_order_value": 65.5
+  },
+  {
+   "hour": 19,
+   "total_sales": 66905,
+   "avg_sales_per_day": 2158,
+   "orders": 862,
+   "avg_orders_per_day": 27.8,
+   "avg_order_value": 77.6
+  },
+  {
+   "hour": 20,
+   "total_sales": 13500,
+   "avg_sales_per_day": 435,
+   "orders": 181,
+   "avg_orders_per_day": 5.8,
+   "avg_order_value": 74.6
+  },
+  {
+   "hour": 21,
+   "total_sales": 784,
+   "avg_sales_per_day": 25,
+   "orders": 14,
+   "avg_orders_per_day": 0.5,
+   "avg_order_value": 56.0
+  }
+ ],
+ "weekday_weekend": {
+  "weekday": {
+   "total_sales": 1557914,
+   "orders": 16907,
+   "n_days": 21,
+   "avg_daily_sales": 74186,
+   "avg_daily_orders": 805,
+   "avg_order_value": 92.1
+  },
+  "weekend": {
+   "total_sales": 504735,
+   "orders": 6015,
+   "n_days": 10,
+   "avg_daily_sales": 50474,
+   "avg_daily_orders": 602,
+   "avg_order_value": 83.9
+  }
+ },
+ "by_dow": [
+  {
+   "dow": "Monday",
+   "total_sales": 353089,
+   "avg_daily_sales": 70618,
+   "orders": 3933,
+   "n_days": 5,
+   "is_weekend": false
+  },
+  {
+   "dow": "Tuesday",
+   "total_sales": 279341,
+   "avg_daily_sales": 69835,
+   "orders": 3071,
+   "n_days": 4,
+   "is_weekend": false
+  },
+  {
+   "dow": "Wednesday",
+   "total_sales": 335712,
+   "avg_daily_sales": 83928,
+   "orders": 3499,
+   "n_days": 4,
+   "is_weekend": false
+  },
+  {
+   "dow": "Thursday",
+   "total_sales": 289283,
+   "avg_daily_sales": 72321,
+   "orders": 3154,
+   "n_days": 4,
+   "is_weekend": false
+  },
+  {
+   "dow": "Friday",
+   "total_sales": 300489,
+   "avg_daily_sales": 75122,
+   "orders": 3250,
+   "n_days": 4,
+   "is_weekend": false
+  },
+  {
+   "dow": "Saturday",
+   "total_sales": 286648,
+   "avg_daily_sales": 57330,
+   "orders": 3358,
+   "n_days": 5,
+   "is_weekend": true
+  },
+  {
+   "dow": "Sunday",
+   "total_sales": 218087,
+   "avg_daily_sales": 43617,
+   "orders": 2657,
+   "n_days": 5,
+   "is_weekend": true
+  }
+ ],
+ "meals": [
+  {
+   "meal": "Breakfast",
+   "total_sales": 554598,
+   "pct_sales": 26.9,
+   "orders": 7609,
+   "pct_orders": 33.2,
+   "avg_order_value": 72.9,
+   "avg_daily_sales": 17890
+  },
+  {
+   "meal": "Lunch",
+   "total_sales": 1042489,
+   "pct_sales": 50.5,
+   "orders": 9222,
+   "pct_orders": 40.2,
+   "avg_order_value": 113.0,
+   "avg_daily_sales": 33629
+  },
+  {
+   "meal": "Tea / Snacks",
+   "total_sales": 384373,
+   "pct_sales": 18.6,
+   "orders": 5034,
+   "pct_orders": 22.0,
+   "avg_order_value": 76.4,
+   "avg_daily_sales": 12399
+  },
+  {
+   "meal": "Dinner",
+   "total_sales": 81189,
+   "pct_sales": 3.9,
+   "orders": 1057,
+   "pct_orders": 4.6,
+   "avg_order_value": 76.8,
+   "avg_daily_sales": 2619
+  }
+ ],
+ "meal_windows": {
+  "Breakfast": "6:00\u201311:00",
+  "Lunch": "11:00\u201315:00",
+  "Tea / Snacks": "15:00\u201319:00",
+  "Dinner": "19:00\u201321:00"
+ },
+ "daily": [
+  {
+   "date": "2026-05-02",
+   "sales": 35269,
+   "orders": 425,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-03",
+   "sales": 32522,
+   "orders": 434,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-04",
+   "sales": 53579,
+   "orders": 656,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-05",
+   "sales": 57469,
+   "orders": 655,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-06",
+   "sales": 118638,
+   "orders": 1101,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-07",
+   "sales": 72995,
+   "orders": 760,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-08",
+   "sales": 76594,
+   "orders": 792,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-09",
+   "sales": 63188,
+   "orders": 743,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-10",
+   "sales": 40543,
+   "orders": 491,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-11",
+   "sales": 76399,
+   "orders": 831,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-12",
+   "sales": 74907,
+   "orders": 822,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-13",
+   "sales": 77474,
+   "orders": 822,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-14",
+   "sales": 74351,
+   "orders": 810,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-15",
+   "sales": 79442,
+   "orders": 834,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-16",
+   "sales": 60964,
+   "orders": 733,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-17",
+   "sales": 47313,
+   "orders": 575,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-18",
+   "sales": 72009,
+   "orders": 782,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-19",
+   "sales": 75902,
+   "orders": 819,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-20",
+   "sales": 75778,
+   "orders": 851,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-21",
+   "sales": 82925,
+   "orders": 884,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-22",
+   "sales": 75649,
+   "orders": 820,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-23",
+   "sales": 64193,
+   "orders": 720,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-24",
+   "sales": 47375,
+   "orders": 595,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-25",
+   "sales": 73807,
+   "orders": 797,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-26",
+   "sales": 71063,
+   "orders": 775,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-27",
+   "sales": 63822,
+   "orders": 725,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-28",
+   "sales": 59012,
+   "orders": 700,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-29",
+   "sales": 68804,
+   "orders": 804,
+   "is_weekend": false
+  },
+  {
+   "date": "2026-05-30",
+   "sales": 63034,
+   "orders": 737,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-05-31",
+   "sales": 50334,
+   "orders": 562,
+   "is_weekend": true
+  },
+  {
+   "date": "2026-06-01",
+   "sales": 77295,
+   "orders": 867,
+   "is_weekend": false
+  }
+ ],
+ "payment": [
+  {
+   "type": "CARD",
+   "sales": 913,
+   "orders": 12
+  },
+  {
+   "type": "Cash",
+   "sales": 1150547,
+   "orders": 13261
+  },
+  {
+   "type": "Part Payment",
+   "sales": 12949,
+   "orders": 103
+  },
+  {
+   "type": "UPI",
+   "sales": 898240,
+   "orders": 9546
+  }
+ ]
+};
+
+const F = {family:"'Hanken Grotesk', sans-serif"};
+Chart.defaults.font.family = "'Hanken Grotesk', sans-serif";
+Chart.defaults.color = "#6a6052";
+const C = {saffron:'#e08b2b',terra:'#c0492f',sage:'#4f7a5e',plum:'#7a4b63',gold:'#caa24a',ink:'#211c15',line:'#e3dac8'};
+const rupee = v => '₹' + Math.round(v).toLocaleString('en-IN');
+const hourLabel = h => { const ap=h<12?'AM':'PM'; let hh=h%12; if(hh===0)hh=12; return hh+' '+ap; };
+
+/* 1. HOURLY */
+(()=>{
+  const d = DATA.hourly;
+  new Chart(document.getElementById('hourChart'),{
+    data:{
+      labels:d.map(x=>hourLabel(x.hour)),
+      datasets:[
+        {type:'bar',label:'Avg sales / day',data:d.map(x=>x.avg_sales_per_day),
+         backgroundColor:d.map(x=>x.hour===13?C.terra:C.saffron),borderRadius:5,yAxisID:'y',order:2},
+        {type:'line',label:'Avg orders / day',data:d.map(x=>x.avg_orders_per_day),
+         borderColor:C.sage,backgroundColor:C.sage,borderWidth:2.5,tension:.35,pointRadius:2.5,
+         pointBackgroundColor:C.sage,yAxisID:'y1',order:1}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:16,font:{size:12.5}}},
+        tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y'?'  Avg sales: '+rupee(c.parsed.y):'  Avg orders: '+c.parsed.y}}},
+      scales:{
+        y:{position:'left',title:{display:true,text:'₹ per day',font:{size:11}},grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'}},
+        y1:{position:'right',title:{display:true,text:'orders',font:{size:11}},grid:{drawOnChartArea:false},ticks:{}},
+        x:{grid:{display:false},ticks:{font:{size:11},maxRotation:0,autoSkip:false}}
+      }}
+  });
+})();
+
+/* 2. DAY OF WEEK */
+(()=>{
+  const d = DATA.by_dow;
+  new Chart(document.getElementById('dowChart'),{
+    type:'bar',
+    data:{labels:d.map(x=>x.dow.slice(0,3)),
+      datasets:[{label:'Avg sales / day',data:d.map(x=>x.avg_daily_sales),
+        backgroundColor:d.map(x=>x.is_weekend?C.sage:C.saffron),borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:'Average sales per day, by weekday',color:'#211c15',font:{family:"'Fraunces', serif",size:14,weight:'600'},padding:{bottom:12}},
+        tooltip:{callbacks:{label:c=>rupee(c.parsed.y)+' / day'}}},
+      scales:{y:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true},
+        x:{grid:{display:false},ticks:{font:{size:12}}}}}
+  });
+})();
+
+/* 3. MEALS doughnut + list */
+(()=>{
+  const d = DATA.meals;
+  const cols=[C.saffron,C.terra,C.sage,C.plum];
+  new Chart(document.getElementById('mealChart'),{
+    type:'doughnut',
+    data:{labels:d.map(x=>x.meal),
+      datasets:[{data:d.map(x=>x.total_sales),backgroundColor:cols,borderColor:'#fffdf8',borderWidth:3,hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{display:false},
+        title:{display:true,text:'Share of net sales',color:'#211c15',font:{family:"'Fraunces', serif",size:14,weight:'600'},padding:{bottom:8}},
+        tooltip:{callbacks:{label:c=>{const m=d[c.dataIndex];return '  '+rupee(m.total_sales)+' · '+m.pct_sales+'%';}}}}}
+  });
+  const list=document.getElementById('mealList');
+  const win={'Breakfast':'6–11 AM','Lunch':'11 AM–3 PM','Tea / Snacks':'3–7 PM','Dinner':'after 7 PM'};
+  d.forEach((m,i)=>{
+    const row=document.createElement('div');row.className='meal-row';
+    row.innerHTML=`<span class="dot" style="background:${cols[i]}"></span>
+      <div><div class="name">${m.meal}</div><div class="win">${win[m.meal]} · ₹${m.avg_order_value} avg bill</div></div>
+      <div><div class="pct">${m.pct_sales}%</div><div class="rev">${rupee(m.total_sales)}</div></div>`;
+    list.appendChild(row);
+  });
+})();
+
+/* 4. DAILY */
+(()=>{
+  const d = DATA.daily;
+  new Chart(document.getElementById('dailyChart'),{
+    type:'bar',
+    data:{labels:d.map(x=>{const dt=new Date(x.date);return dt.getDate()+'/'+(dt.getMonth()+1);}),
+      datasets:[{label:'Net sales',data:d.map(x=>x.sales),
+        backgroundColor:d.map(x=>x.is_weekend?C.sage:C.saffron),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{title:c=>'Day '+c[0].label,label:c=>rupee(c.parsed.y)+' · '+d[c.dataIndex].orders+' orders'}}},
+      scales:{y:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true},
+        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0,autoSkip:true,maxTicksLimit:16}}}}
+  });
+})();
+</script>
+</body>
+</html>
