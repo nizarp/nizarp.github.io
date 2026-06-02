@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -89,6 +89,26 @@
   .insight b{color:var(--ink)}
 
   footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* Item insights extras */
+  .hour-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .htab{padding:5px 13px;border-radius:999px;font-size:13px;font-weight:600;border:1.5px solid var(--line);background:var(--paper-2);color:var(--ink-soft);cursor:pointer;transition:all .15s}
+  .htab.active{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+  .top3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .top3-card{border:1px solid var(--line);border-radius:14px;padding:16px 14px;background:var(--paper-2);position:relative;overflow:hidden}
+  .top3-card .rank{font-family:'Fraunces',serif;font-style:italic;font-size:44px;font-weight:900;color:var(--line);position:absolute;top:-6px;right:10px;line-height:1;user-select:none}
+  .top3-card .item-name{font-weight:700;font-size:15px;position:relative;z-index:1;max-width:90%}
+  .top3-card .item-qty{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin-top:6px;color:var(--terra)}
+  .top3-card .item-rev{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .top3-card.gold-card .item-qty{color:var(--saffron)}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  .heatmap-wrap{overflow-x:auto}
+  .hm-table{border-collapse:collapse;width:100%;font-size:12px}
+  .hm-table th{font-size:11px;font-weight:600;color:var(--ink-soft);text-align:center;padding:5px 4px;white-space:nowrap}
+  .hm-table td{text-align:center;padding:5px 3px;border-radius:4px;font-size:11.5px;font-weight:500;min-width:38px}
+  .hm-table .item-lbl{text-align:left;font-weight:600;font-size:12.5px;padding-right:10px;white-space:nowrap;color:var(--ink)}
+  .chart-box.med{height:300px}
+  @media(max-width:860px){.top3-grid{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr}}
 
   @media(max-width:860px){
     .kpis{grid-template-columns:repeat(2,1fr)}
@@ -214,8 +234,95 @@
     </div>
   </section>
 
+  <!-- ─── ITEM INSIGHTS DIVIDER ─── -->
+  <div style="margin-top:56px;border-top:2px dashed var(--line);padding-top:8px">
+    <div class="eyebrow" style="margin-top:16px">Item-wise Intelligence · Hourly Report</div>
+    <p style="color:var(--ink-soft);font-size:14px;margin-top:4px;max-width:72ch">The sections below are drawn from the <b>Item-wise Hourly</b> export covering <b>2 May – 2 Jun 2026</b> — 1,540 item-hour combinations across 16 trading hours.</p>
+  </div>
+
+  <!-- 5. TOP 3 PER HOUR -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Top 3 items sold each hour</h2></div>
+    <p class="sec-sub">By quantity sold in that hour across the full month. Pick an hour to see its podium.</p>
+    <div class="card">
+      <div class="hour-tabs" id="hourTabs"></div>
+      <div class="top3-grid" id="top3Grid"></div>
+      <div class="insight" id="top3Insight" style="margin-top:16px"></div>
+    </div>
+  </section>
+
+  <!-- 6. ITEM HEATMAP -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Item demand heatmap</h2></div>
+    <p class="sec-sub">Quantities sold by hour for 10 key items. Darker = more sold. Reveals exactly when each item peaks — useful for prep scheduling.</p>
+    <div class="card">
+      <div class="heatmap-wrap">
+        <table class="hm-table" id="heatmapTable"></table>
+      </div>
+      <div class="insight" style="margin-top:16px">
+        <b>Breakfast items (Idly, Appam, Idiyappam)</b> peak hard at 7–9 AM then drop off sharply — prep cutoff can be around 11 AM. <b>Meals</b> is strictly a lunch item (12–2 PM). <b>Tea</b> runs all day with two surges (8–11 AM and 4–5 PM). <b>Chapathi</b> is the only item that keeps selling late into evening, making it a reliable dinner anchor.
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. TOP ITEMS BY REVENUE vs QUANTITY -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>Revenue leaders vs volume drivers</h2></div>
+    <p class="sec-sub">Two different angles on what matters most. Revenue leaders fund the canteen; volume drivers define the queue and kitchen load.</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-box med"><canvas id="topRevChart"></canvas></div>
+        <div class="insight" style="margin-top:14px"><b>Meals</b> is the single biggest revenue line at ₹4.13L — nearly 20% of all item revenue. The top 5 items together account for ~41% of revenue, so protecting their availability is critical.</div>
+      </div>
+      <div class="card">
+        <div class="chart-box med"><canvas id="topQtyChart"></canvas></div>
+        <div class="insight" style="margin-top:14px"><b>Tea</b> leads on volume at 11,485 units — but note its revenue rank is #3. The <b>Parcel</b> item is interesting: #4 by volume but low revenue (₹5/unit), suggesting it's a packaging/takeaway charge rather than food.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. HOURLY REVENUE vs QUANTITY (item report) -->
+  <section>
+    <div class="sec-head"><span class="sec-num">08</span><h2>Hourly revenue &amp; footfall — item report view</h2></div>
+    <p class="sec-sub">Total revenue and items sold each hour across the full period. Compares the <i>value</i> generated against the <i>volume</i> of items served — the divergence at 1 PM shows a high-value but relatively efficient lunch hour.</p>
+    <div class="card">
+      <div class="chart-box tall"><canvas id="itemHourChart"></canvas></div>
+      <div class="insight">The <b>1 PM hour generated ₹4.25L</b> in revenue on just ~8,000 item units — an avg item value of ₹53, driven by the premium Meals &amp; Biryani products. Compare that to 8 AM: 11,629 items but only ₹1.71L — mostly low-ticket breakfast staples. <b>Opportunity:</b> nudge higher-value items (Ghee Rice, Chicken Biryani) slightly earlier into the 11 AM slot to capture pre-lunch appetite.</div>
+    </div>
+  </section>
+
+  <!-- 9. CONSISTENT ALL-DAY SELLERS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">09</span><h2>All-day menu anchors</h2></div>
+    <p class="sec-sub">Items that sold in <b>14 or more of the 16 trading hours</b> — your most operationally critical items. If any of these run out, some part of the day's menu is always broken.</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-box med"><canvas id="consistentChart"></canvas></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
+        <div class="meal-list" id="consistentList"></div>
+        <div class="insight" style="margin-top:14px"><b>Chapathi, Kanji, Poricha Pathiri</b> appear in all 16 hours. <b>Tea</b> is close with 15 hours. These items need deep prep stock from morning. Consider a <b>par-level alert system</b> — if any of these 10 items drops below a threshold before 2 PM, restock immediately.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. REVENUE SHARE PIE -->
+  <section>
+    <div class="sec-head"><span class="sec-num">10</span><h2>Revenue concentration</h2></div>
+    <p class="sec-sub">How concentrated is the canteen's revenue? The top 5 items vs everything else.</p>
+    <div class="grid-2b">
+      <div class="card">
+        <div class="chart-box"><canvas id="revShareChart"></canvas></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
+        <div class="insight" style="margin-top:0"><b>Top 5 items = 40.8% of all revenue.</b> That's healthy concentration — not dangerously over-reliant on one SKU, but enough that a supply issue with Meals or Chicken Biryani meaningfully hurts the day. Diversification into the mid-tier (Ayla Fry, Nethal Fry, Green Peas) is already underway.</div>
+        <div class="insight" style="margin-top:0;border-left-color:var(--sage)"><b>Scaling lever:</b> Chicken Biryani at ₹1.55L and only 917 units signals a ₹169/unit avg — the highest-value item after Ghee Rice. Even a 20% volume increase would add ~₹31k/month. Consider offering it from 11 AM instead of 12 PM to capture early-lunch demand.</div>
+      </div>
+    </div>
+  </section>
+
   <footer>
-    <span>KDCH Canteen · POS export “KDCh_All_orders” · 22,922 successful orders (99.99% Dine-In)</span>
+    <span>KDCH Canteen · POS export "KDCh_All_orders" + "Item Vise Hourly" · 22,922 orders · 2 May – 2 Jun 2026</span>
     <span>Payment mix: Cash 56% · UPI 44% of value</span>
   </footer>
 </div>
@@ -784,6 +891,224 @@ if(_built) return; _built=true;
         tooltip:{callbacks:{title:c=>'Day '+c[0].label,label:c=>rupee(c.parsed.y)+' · '+d[c.dataIndex].orders+' orders'}}},
       scales:{y:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true},
         x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0,autoSkip:true,maxTicksLimit:16}}}}
+  });
+})();
+
+/* ============================================================
+   ITEM-WISE DATA
+   ============================================================ */
+const ITEM = {
+  top3ByHour: {"06 AM":[["Appam",44,528],["Idly",44,528],["Tea",43,512]],"07 AM":[["Idly",1498,17928],["Tea",1183,14151],["Appam",1146,13752]],"08 AM":[["Idly",1817,21785],["Appam",1764,21139],["Tea",1492,17846]],"09 AM":[["Tea",1355,16218],["Appam",1123,13468],["Idly",1022,12251]],"10 AM":[["Tea",1486,17792],["Appam",609,7267],["Porotta",548,6576]],"11 AM":[["Tea",1520,18195],["Porotta",470,5640],["Uzhunnu Vada",333,3980]],"12 PM":[["Meals",965,57791],["Parcel",500,2500],["Tea",418,5014]],"01 PM":[["Meals",3341,200200],["Parcel",1130,5641],["Ayla Fry",491,39257]],"02 PM":[["Meals",1934,115732],["Parcel",419,2093],["Ayla Fry",265,21200]],"03 PM":[["Tea",520,6232],["Meals",425,25500],["Chapathi",257,3084]],"04 PM":[["Tea",1334,15864],["Tea S",934,7472],["Poricha Pathiri S",446,3568]],"05 PM":[["Tea",1232,14730],["Tea S",291,2328],["Chapathi",289,3468]],"06 PM":[["Tea",632,7568],["Chapathi",470,5640],["Parcel",203,1015]],"07 PM":[["Chapathi",814,9753],["Kanji",209,4180],["Parcel",206,1030]],"08 PM":[["Chapathi",198,2376],["Parcel",52,260],["Porotta",44,528]],"09 PM":[["Chapathi",22,264],["Masala Curry",5,200],["Kallumakkaya",4,120]]},
+  hourlyRev: {"06 AM":3347,"07 AM":117183,"08 AM":171414,"09 AM":138730,"10 AM":142099,"11 AM":139063,"12 PM":205243,"01 PM":424704,"02 PM":278379,"03 PM":111948,"04 PM":116698,"05 PM":85331,"06 PM":70396,"07 PM":66905,"08 PM":13500,"09 PM":784},
+  hourlyQty: {"06 AM":250,"07 AM":8269,"08 AM":11629,"09 AM":8927,"10 AM":8696,"11 AM":7567,"12 PM":5441,"01 PM":7980,"02 PM":5243,"03 PM":3407,"04 PM":6647,"05 PM":4815,"06 PM":3655,"07 PM":2914,"08 PM":613,"09 PM":42},
+  top15Rev: [["Meals",6895,412988],["Chicken Biryani",917,155160],["Tea",11485,137359],["Ayla Fry",987,78914],["Chicken Curry",565,67647],["Ayla Curry",787,62949],["Appam",5206,62394],["Idly",4989,59776],["Nethal Fry",731,58480],["Green Peas",1416,56624],["Chapathi",4278,51263],["Idiyappam",3724,44618],["Egg Curry",1003,40035],["Kanji",1612,32230],["Porotta",2645,31737]],
+  top15Qty: [["Tea",11485,137359],["Meals",6895,412988],["Appam",5206,62394],["Parcel",5036,25166],["Idly",4989,59776],["Chapathi",4278,51263],["Idiyappam",3724,44618],["Tea S",2998,23984],["Porotta",2645,31737],["Uzhunnu Vada",2392,28645],["Poricha Pathiri",2303,27397],["Kanji",1612,32230],["Green Peas",1416,56624],["Samosa",1243,14893],["Chattipathiri",1208,30200]],
+  heatmap: [{"item":"Tea","06 AM":43,"07 AM":1183,"08 AM":1492,"09 AM":1355,"10 AM":1486,"11 AM":1520,"12 PM":418,"01 PM":21,"02 PM":24,"03 PM":520,"04 PM":1334,"05 PM":1232,"06 PM":632,"07 PM":190,"08 PM":35,"09 PM":0},{"item":"Meals","06 AM":0,"07 AM":0,"08 AM":0,"09 AM":0,"10 AM":0,"11 AM":13,"12 PM":965,"01 PM":3341,"02 PM":1934,"03 PM":425,"04 PM":104,"05 PM":6,"06 PM":71,"07 PM":36,"08 PM":0,"09 PM":0},{"item":"Appam","06 AM":44,"07 AM":1146,"08 AM":1764,"09 AM":1123,"10 AM":609,"11 AM":322,"12 PM":79,"01 PM":7,"02 PM":0,"03 PM":10,"04 PM":12,"05 PM":18,"06 PM":39,"07 PM":30,"08 PM":3,"09 PM":0},{"item":"Idly","06 AM":44,"07 AM":1498,"08 AM":1817,"09 AM":1022,"10 AM":354,"11 AM":187,"12 PM":27,"01 PM":10,"02 PM":4,"03 PM":6,"04 PM":0,"05 PM":7,"06 PM":6,"07 PM":7,"08 PM":0,"09 PM":0},{"item":"Chapathi","06 AM":9,"07 AM":69,"08 AM":254,"09 AM":349,"10 AM":406,"11 AM":330,"12 PM":166,"01 PM":168,"02 PM":188,"03 PM":257,"04 PM":289,"05 PM":289,"06 PM":470,"07 PM":814,"08 PM":198,"09 PM":22},{"item":"Idiyappam","06 AM":18,"07 AM":961,"08 AM":1117,"09 AM":812,"10 AM":462,"11 AM":200,"12 PM":56,"01 PM":21,"02 PM":9,"03 PM":10,"04 PM":19,"05 PM":0,"06 PM":6,"07 PM":29,"08 PM":4,"09 PM":0},{"item":"Porotta","06 AM":0,"07 AM":0,"08 AM":3,"09 AM":255,"10 AM":548,"11 AM":470,"12 PM":181,"01 PM":123,"02 PM":205,"03 PM":157,"04 PM":150,"05 PM":190,"06 PM":161,"07 PM":158,"08 PM":44,"09 PM":0},{"item":"Uzhunnu Vada","06 AM":1,"07 AM":267,"08 AM":354,"09 AM":314,"10 AM":366,"11 AM":333,"12 PM":153,"01 PM":34,"02 PM":25,"03 PM":94,"04 PM":145,"05 PM":155,"06 PM":120,"07 PM":28,"08 PM":3,"09 PM":0},{"item":"Poricha Pathiri","06 AM":15,"07 AM":232,"08 AM":302,"09 AM":321,"10 AM":343,"11 AM":327,"12 PM":115,"01 PM":27,"02 PM":25,"03 PM":91,"04 PM":216,"05 PM":137,"06 PM":91,"07 PM":41,"08 PM":18,"09 PM":2},{"item":"Chicken Biryani","06 AM":0,"07 AM":0,"08 AM":0,"09 AM":0,"10 AM":0,"11 AM":20,"12 PM":202,"01 PM":317,"02 PM":250,"03 PM":73,"04 PM":26,"05 PM":14,"06 PM":8,"07 PM":4,"08 PM":3,"09 PM":0}],
+  consistent: [["Tea",15,11485,137359],["Appam",14,5206,62394],["Green Peas",15,1416,56624],["Chapathi",16,4278,51263],["Idiyappam",14,3724,44618],["Egg Curry",14,1003,40035],["Kanji",16,1612,32230],["Kadala Curry",15,776,31040],["Uzhunnu Vada",15,2392,28645],["Poricha Pathiri",16,2303,27397]],
+  revShare: [["Meals",19.8],["Chicken Biryani",7.4],["Tea",6.6],["Ayla Fry",3.8],["Chicken Curry",3.2],["Others",59.2]]
+};
+
+const HOURS = ["06 AM","07 AM","08 AM","09 AM","10 AM","11 AM","12 PM","01 PM","02 PM","03 PM","04 PM","05 PM","06 PM","07 PM","08 PM","09 PM"];
+
+/* ---- Section 5: Top 3 per hour tabs ---- */
+(function(){
+  const tabsEl = document.getElementById('hourTabs');
+  const gridEl = document.getElementById('top3Grid');
+  const insightEl = document.getElementById('top3Insight');
+  const insights = {
+    "06 AM":"Early risers at 6 AM gravitate entirely to breakfast staples — Appam, Idly, and Tea in near-equal measure. Keep breakfast prep warm and ready well before 6 AM.",
+    "07 AM":"The 7 AM rush is the breakfast peak by volume. <b>Idly dominates at 1,498 units</b>, closely followed by Tea and Appam. Ensure Idly steamer capacity is maximised before 7.",
+    "08 AM":"<b>Peak breakfast hour</b> — highest single-item quantity of the day (Idly: 1,817 units). Three items account for the lion's share of volume; a stockout on any of them at 8 AM is a service crisis.",
+    "09 AM":"Tea overtakes Idly at 9 AM as the breakfast window winds down. Appam remains strong. Start transitioning prep towards mid-morning snacks.",
+    "10 AM":"Tea is the clear leader. <b>Porotta enters the top 3</b> for the first time — signals the start of the pre-lunch window. Stock up Porotta from 9:30 AM.",
+    "11 AM":"<b>Uzhunnu Vada joins the top 3</b> — a popular mid-morning snack. Tea volume stays high. This is the ideal hour to push tea+snack combo deals.",
+    "12 PM":"The switch flips — <b>Meals rockets to #1 at noon</b>. Lunch service dominates. The Parcel item hits 500 units, suggesting significant takeaway demand at lunchtime.",
+    "01 PM":"<b>Peak revenue hour of the day.</b> Meals at 3,341 units is the single highest quantity reading for any item in any hour. Ayla Fry joins as a strong #3 side dish. Full kitchen capacity needed.",
+    "02 PM":"Lunch tapering but still strong. Meals and Ayla Fry hold top positions. This is when prep for the tea/snack transition should begin.",
+    "03 PM":"The afternoon gap — Tea reclaims #1 as lunch service fades. Meals and Chapathi fill out the top 3. A natural lull; use this for restocking and prep.",
+    "04 PM":"<b>Afternoon tea surge</b>: Tea and Tea S together account for 2,268 units. Poricha Pathiri S is a popular snack companion. Ensure tea brewing capacity is high.",
+    "05 PM":"Second tea peak. Chapathi comes back strongly as an early dinner option. The tea+snack pattern is very consistent 4–6 PM.",
+    "06 PM":"Tea still leads. <b>Chapathi becomes a top seller</b> — the evening chapathi service is clearly in demand. Parcel orders suggest end-of-day takeaways.",
+    "07 PM":"<b>Chapathi is #1</b> by quantity in the evening. Kanji (rice gruel) emerges — a lighter dinner option. The dinner menu is essentially Chapathi + Kanji.",
+    "08 PM":"Steep drop in volume — Chapathi and Parcel are the only significant movers. Consider whether full kitchen staffing is justified past 8 PM.",
+    "09 PM":"<b>Negligible volume</b> — 42 items total across the hour. Chapathi sells in small quantities. Review whether 9 PM operation is cost-effective."
+  };
+
+  let active = "01 PM";
+  function render(hour){
+    active = hour;
+    tabsEl.querySelectorAll('.htab').forEach(t=>t.classList.toggle('active', t.dataset.h===hour));
+    const top3 = ITEM.top3ByHour[hour];
+    const colors = [C.saffron, C.terra, C.sage];
+    gridEl.innerHTML = top3.map((item,i)=>`
+      <div class="top3-card${i===0?' gold-card':''}">
+        <div class="rank">${i+1}</div>
+        <div class="item-name">${item[0]}</div>
+        <div class="item-qty">${item[1].toLocaleString('en-IN')} units</div>
+        <div class="item-rev">₹${item[2].toLocaleString('en-IN')} revenue</div>
+      </div>`).join('');
+    insightEl.innerHTML = insights[hour] || '';
+  }
+
+  HOURS.forEach(h=>{
+    const btn = document.createElement('button');
+    btn.className='htab'; btn.dataset.h=h; btn.textContent=h;
+    btn.addEventListener('click',()=>render(h));
+    tabsEl.appendChild(btn);
+  });
+  render(active);
+})();
+
+/* ---- Section 6: Heatmap ---- */
+(function(){
+  const table = document.getElementById('heatmapTable');
+  const data = ITEM.heatmap;
+  // Find max for colour scaling
+  let maxVal = 0;
+  data.forEach(row=>HOURS.forEach(h=>{if(row[h]>maxVal) maxVal=row[h];}));
+
+  function cellColor(v){
+    if(v===0) return '#f6f1e7';
+    const t = Math.pow(v/maxVal, 0.45); // power <1 boosts mid-range visibility
+    // interpolate from paper-2 to terra
+    const r = Math.round(255 + (192-255)*t);
+    const g = Math.round(253 + (73-253)*t);
+    const b = Math.round(248 + (47-248)*t);
+    return `rgb(${r},${g},${b})`;
+  }
+  function textColor(v){return v/maxVal > 0.5 ? '#fff' : '#211c15';}
+
+  // Header row
+  let thead = '<thead><tr><th style="text-align:left">Item</th>';
+  HOURS.forEach(h=>{ thead += `<th>${h}</th>`; });
+  thead += '</tr></thead>';
+
+  // Body rows
+  let tbody = '<tbody>';
+  data.forEach(row=>{
+    tbody += `<tr><td class="item-lbl">${row.item}</td>`;
+    HOURS.forEach(h=>{
+      const v = row[h]||0;
+      const bg = cellColor(v);
+      const fg = textColor(v);
+      tbody += `<td style="background:${bg};color:${fg}">${v>0?v.toLocaleString('en-IN'):''}</td>`;
+    });
+    tbody += '</tr>';
+  });
+  tbody += '</tbody>';
+  table.innerHTML = thead + tbody;
+})();
+
+/* ---- Section 7: Top Revenue chart ---- */
+(function(){
+  const d = ITEM.top15Rev.slice(0,10);
+  new Chart(document.getElementById('topRevChart'),{
+    type:'bar',
+    data:{
+      labels:d.map(x=>x[0]),
+      datasets:[{label:'Net Sales (₹)',data:d.map(x=>x[2]),
+        backgroundColor:[C.terra,C.saffron,C.sage,C.plum,C.gold,C.saffron,C.sage,C.plum,C.gold,C.saffron],
+        borderRadius:5}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        title:{display:true,text:'Top 10 items by net revenue',color:'#211c15',font:{family:"'Fraunces',serif",size:14,weight:'600'},padding:{bottom:10}},
+        tooltip:{callbacks:{label:c=>rupee(c.parsed.x)}}},
+      scales:{x:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000).toFixed(0)+'k'},beginAtZero:true},
+        y:{grid:{display:false},ticks:{font:{size:11.5}}}}}
+  });
+})();
+
+/* ---- Section 7: Top Quantity chart ---- */
+(function(){
+  const d = ITEM.top15Qty.slice(0,10);
+  new Chart(document.getElementById('topQtyChart'),{
+    type:'bar',
+    data:{
+      labels:d.map(x=>x[0]),
+      datasets:[{label:'Units sold',data:d.map(x=>x[1]),
+        backgroundColor:[C.sage,C.terra,C.saffron,C.plum,C.sage,C.saffron,C.plum,C.gold,C.sage,C.saffron],
+        borderRadius:5}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        title:{display:true,text:'Top 10 items by units sold',color:'#211c15',font:{family:"'Fraunces',serif",size:14,weight:'600'},padding:{bottom:10}},
+        tooltip:{callbacks:{label:c=>c.parsed.x.toLocaleString('en-IN')+' units'}}},
+      scales:{x:{grid:{color:C.line},ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},beginAtZero:true},
+        y:{grid:{display:false},ticks:{font:{size:11.5}}}}}
+  });
+})();
+
+/* ---- Section 8: Item hourly revenue + qty ---- */
+(function(){
+  const labels = HOURS;
+  const rev = labels.map(h=>ITEM.hourlyRev[h]||0);
+  const qty = labels.map(h=>ITEM.hourlyQty[h]||0);
+  new Chart(document.getElementById('itemHourChart'),{
+    data:{labels,
+      datasets:[
+        {type:'bar',label:'Revenue (₹)',data:rev,backgroundColor:labels.map(h=>h==='01 PM'?C.terra:C.saffron),borderRadius:5,yAxisID:'y',order:2},
+        {type:'line',label:'Items sold',data:qty,borderColor:C.plum,backgroundColor:C.plum,borderWidth:2.5,tension:.35,pointRadius:3,yAxisID:'y1',order:1}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:16,font:{size:12.5}}},
+        tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y'?'  Revenue: '+rupee(c.parsed.y):'  Items: '+c.parsed.y.toLocaleString('en-IN')}}},
+      scales:{
+        y:{position:'left',title:{display:true,text:'₹ revenue',font:{size:11}},grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000).toFixed(0)+'k'}},
+        y1:{position:'right',title:{display:true,text:'items sold',font:{size:11}},grid:{drawOnChartArea:false}},
+        x:{grid:{display:false},ticks:{font:{size:11},maxRotation:0,autoSkip:false}}
+      }}
+  });
+})();
+
+/* ---- Section 9: Consistent sellers ---- */
+(function(){
+  const d = ITEM.consistent;
+  new Chart(document.getElementById('consistentChart'),{
+    type:'bar',
+    data:{
+      labels:d.map(x=>x[0]),
+      datasets:[
+        {label:'Net Revenue (₹)',data:d.map(x=>x[3]),backgroundColor:C.saffron,borderRadius:4,yAxisID:'y'},
+        {label:'Hours active',data:d.map(x=>x[1]),backgroundColor:C.sage,borderRadius:4,yAxisID:'y1',type:'bar'}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:14,font:{size:12}}},
+        title:{display:true,text:'All-day anchors: revenue vs hours active',color:'#211c15',font:{family:"'Fraunces',serif",size:13,weight:'600'},padding:{bottom:8}},
+        tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y'?rupee(c.parsed.y):c.parsed.y+' hrs'}}},
+      scales:{
+        y:{position:'left',ticks:{callback:v=>'₹'+(v/1000).toFixed(0)+'k'},grid:{color:C.line},beginAtZero:true},
+        y1:{position:'right',min:0,max:17,grid:{drawOnChartArea:false},ticks:{stepSize:1}},
+        x:{grid:{display:false},ticks:{font:{size:10.5},maxRotation:30}}
+      }}
+  });
+
+  const list = document.getElementById('consistentList');
+  const colors = [C.saffron,C.terra,C.sage,C.plum,C.gold,C.saffron,C.sage,C.terra,C.plum,C.gold];
+  d.forEach((item,i)=>{
+    const row = document.createElement('div'); row.className='meal-row';
+    row.innerHTML=`<span class="dot" style="background:${colors[i]}"></span>
+      <div><div class="name">${item[0]}</div><div class="win">${item[1]} of 16 hrs · ${item[2].toLocaleString('en-IN')} units</div></div>
+      <div><div class="pct" style="font-size:16px">${rupee(item[3])}</div><div class="rev">total revenue</div></div>`;
+    list.appendChild(row);
+  });
+})();
+
+/* ---- Section 10: Revenue share ---- */
+(function(){
+  const d = ITEM.revShare;
+  const cols=[C.terra,C.saffron,C.sage,C.plum,C.gold,'#b5a890'];
+  new Chart(document.getElementById('revShareChart'),{
+    type:'doughnut',
+    data:{labels:d.map(x=>x[0]),
+      datasets:[{data:d.map(x=>x[1]),backgroundColor:cols,borderColor:'#fffdf8',borderWidth:3,hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+      plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:9,padding:12,font:{size:12}}},
+        title:{display:true,text:'Revenue share — top 5 items vs rest',color:'#211c15',font:{family:"'Fraunces',serif",size:14,weight:'600'},padding:{bottom:8}},
+        tooltip:{callbacks:{label:c=>d[c.dataIndex][0]+': '+d[c.dataIndex][1]+'%'}}}}
   });
 })();
 
