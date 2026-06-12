@@ -207,7 +207,7 @@
   <!-- BONUS: daily trend -->
   <section>
     <div class="sec-head"><span class="sec-num">04</span><h2>Daily sales across the period</h2></div>
-    <p class="sec-sub">Bonus view — net sales each day. Orange bars are weekdays, green are weekends.</p>
+    <p class="sec-sub">Net sales each day (bars — orange = weekday, green = weekend) with the <b>daily order count</b> overlaid as a line, so you can see volume and revenue together.</p>
     <div class="card">
       <div class="chart-box"><canvas id="dailyChart"></canvas></div>
       <div class="insight"><b>Is sales really falling?</b> Not on volume — with early-May and today's part-day removed, the daily rhythm holds steady at ₹70–80k on weekdays with regular weekend dips. <b>June 1–11 averaged ₹69.5k/day vs the second half of May (12–31) at ₹67.9k</b> (+2%). The real soft spot is the <b>lunch basket</b>: the average lunch bill slipped <b>₹112 → ₹105</b> as customers traded down from premium chicken dishes — see the item movers in section 06.</div>
@@ -330,18 +330,25 @@ if(_built) return; _built=true;
   });
 })();
 
-/* 4. DAILY */
+/* 4. DAILY (sales bars + orders line) */
 (()=>{
   const d = DATA.daily;
   new Chart(document.getElementById('dailyChart'),{
-    type:'bar',
     data:{labels:d.map(x=>{const dt=new Date(x.date);return dt.getDate()+'/'+(dt.getMonth()+1);}),
-      datasets:[{label:'Net sales',data:d.map(x=>x.sales),
-        backgroundColor:d.map(x=>x.is_weekend?C.sage:C.saffron),borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{title:c=>'Day '+c[0].label,label:c=>rupee(c.parsed.y)+' · '+d[c.dataIndex].orders+' orders'}}},
-      scales:{y:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true},
+      datasets:[
+        {type:'bar',label:'Net sales (₹)',data:d.map(x=>x.sales),
+          backgroundColor:d.map(x=>x.is_weekend?C.sage:C.saffron),borderRadius:4,yAxisID:'y',order:2},
+        {type:'line',label:'Orders',data:d.map(x=>x.orders),
+          borderColor:C.plum,backgroundColor:C.plum,borderWidth:2.5,tension:.3,
+          pointRadius:2,pointHoverRadius:4,yAxisID:'y1',order:1}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:16,font:{size:12.5}}},
+        tooltip:{callbacks:{title:c=>'Day '+c[0].label,
+          label:c=>c.dataset.yAxisID==='y'?'  Net sales: '+rupee(c.parsed.y):'  Orders: '+c.parsed.y}}},
+      scales:{
+        y:{position:'left',grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true,title:{display:true,text:'₹ net sales',font:{size:11}}},
+        y1:{position:'right',grid:{drawOnChartArea:false},beginAtZero:true,title:{display:true,text:'orders',font:{size:11}}},
         x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0,autoSkip:true,maxTicksLimit:16}}}}
   });
 })();
