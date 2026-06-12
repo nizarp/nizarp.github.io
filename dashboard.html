@@ -141,21 +141,21 @@
   <header>
     <div class="eyebrow">Consolidated Report · May–June 2026 · KDCH Canteen</div>
     <h1>What the kitchen <em>actually</em> sells</h1>
-    <p class="sub">A read on <b>30,869 orders</b> from <b>2 May – 11 Jun 2026</b> (41 full days; today's part-day excluded). All figures in Indian Rupees, based on <b>net sales</b> after discount.</p>
+    <p class="sub">A read on <b>23,981 orders</b> from <b>12 May – 11 Jun 2026</b> (31 days). Early-May and today's part-day are excluded for a clean, outlier-free baseline. All figures in Indian Rupees, based on <b>net sales</b> after discount.</p>
 
     <div class="kpis">
-      <div class="kpi"><div class="lab">Total net sales</div><div class="val">₹27.5L</div><div class="note">₹27,49,649</div></div>
-      <div class="kpi"><div class="lab">Total orders</div><div class="val">30,869</div><div class="note">~753 / day</div></div>
+      <div class="kpi"><div class="lab">Total net sales</div><div class="val">₹21.2L</div><div class="note">₹21,22,453</div></div>
+      <div class="kpi"><div class="lab">Total orders</div><div class="val">23,981</div><div class="note">~774 / day</div></div>
       <div class="kpi"><div class="lab">Avg order value</div><div class="val">₹89</div><div class="note">net per bill</div></div>
-      <div class="kpi"><div class="lab">Avg daily sales</div><div class="val">₹67,065</div><div class="note">across 41 days</div></div>
-      <div class="kpi"><div class="lab">Busiest hour</div><div class="val">1 PM</div><div class="note">₹13,474 / day avg</div></div>
+      <div class="kpi"><div class="lab">Avg daily sales</div><div class="val">₹68,466</div><div class="note">across 31 days</div></div>
+      <div class="kpi"><div class="lab">Busiest hour</div><div class="val">1 PM</div><div class="note">₹13,486 / day avg</div></div>
     </div>
   </header>
 
   <!-- 1. HOURLY -->
   <section>
     <div class="sec-head"><span class="sec-num">01</span><h2>Sales by hour of day</h2></div>
-    <p class="sec-sub">Average sales generated in each clock-hour on a typical day (total for that hour ÷ 41 days). The line shows average number of orders, so you can see where the queue forms.</p>
+    <p class="sec-sub">Average sales generated in each clock-hour on a typical day (total for that hour ÷ 31 days). The line shows average number of orders, so you can see where the queue forms.</p>
     <div class="card">
       <div class="chart-box tall"><canvas id="hourChart"></canvas></div>
       <div class="insight">The day has a clear <b>twin-peak shape</b>: a long breakfast build from 7–10 AM, then a sharp <b>1 PM lunch spike (~₹13.5k/day)</b> that alone is bigger than the entire dinner service. After 3 PM trade tapers steadily; past 8 PM it's negligible.</div>
@@ -165,23 +165,23 @@
   <!-- 2. WEEKDAY vs WEEKEND -->
   <section>
     <div class="sec-head"><span class="sec-num">02</span><h2>Weekday vs weekend</h2></div>
-    <p class="sec-sub">Weekend = Saturday &amp; Sunday. Comparing on an <b>average-per-day</b> basis (not totals), since the period had 29 weekdays and 12 weekend days.</p>
+    <p class="sec-sub">Weekend = Saturday &amp; Sunday. Comparing on an <b>average-per-day</b> basis (not totals), since the period had 23 weekdays and 8 weekend days.</p>
     <div class="grid-2b">
       <div class="card">
         <div class="vs">
           <div class="vsbox wd">
             <div class="tag">Weekday</div>
-            <div class="big">₹73,740</div>
-            <div class="smol">avg sales / day · 812 orders · ₹90.8 avg bill</div>
+            <div class="big">₹73,165</div>
+            <div class="smol">avg sales / day · 815 orders · ₹89.8 avg bill</div>
           </div>
           <div class="vsbox we">
             <div class="tag">Weekend</div>
-            <div class="big">₹50,933</div>
-            <div class="smol">avg sales / day · 611 orders · ₹83.4 avg bill</div>
+            <div class="big">₹54,958</div>
+            <div class="smol">avg sales / day · 654 orders · ₹84.0 avg bill</div>
           </div>
         </div>
-        <span class="delta">Weekends run ~31% lighter per day</span>
-        <div class="insight" style="margin-top:14px">Consistent with a <b>hospital / workplace canteen</b> pattern — weekday office and OPD footfall drops on weekends, and the average bill shrinks too (₹91 → ₹83), suggesting fewer full meals and more snacks.</div>
+        <span class="delta">Weekends run ~25% lighter per day</span>
+        <div class="insight" style="margin-top:14px">Consistent with a <b>hospital / workplace canteen</b> pattern — weekday office and OPD footfall drops on weekends, and the average bill shrinks too (₹90 → ₹84), suggesting fewer full meals and more snacks.</div>
       </div>
       <div class="card">
         <div class="chart-box"><canvas id="dowChart"></canvas></div>
@@ -199,7 +199,7 @@
       </div>
       <div class="card">
         <div class="meal-list" id="mealList"></div>
-        <div class="insight"><b>Lunch is the business</b> — almost half of all revenue (₹13.7L) and the richest basket (₹111 avg bill). Breakfast brings the most footfall but cheaper tickets. Dinner is under 5% — worth deciding whether it earns its keep.</div>
+        <div class="insight"><b>Lunch is the business</b> — almost half of all revenue (₹10.6L) and the richest basket (₹109 avg bill). Breakfast brings the most footfall but cheaper tickets. Dinner is under 5% — worth deciding whether it earns its keep.</div>
       </div>
     </div>
   </section>
@@ -210,709 +210,48 @@
     <p class="sec-sub">Bonus view — net sales each day. Orange bars are weekdays, green are weekends.</p>
     <div class="card">
       <div class="chart-box"><canvas id="dailyChart"></canvas></div>
-      <div class="insight"><b>Is sales really falling?</b> Not on volume — today's part-day is now excluded, and the daily rhythm holds steady at ₹70–80k on weekdays with regular weekend dips. Complete <b>June 1–11 averaged ₹69.5k/day vs May's ₹66.2k</b> (+5%, with more orders). The real soft spot is the <b>lunch basket</b>: the average lunch bill slipped <b>₹113 → ₹105</b> as customers traded down from premium chicken dishes — see the item movers in section 06.</div>
+      <div class="insight"><b>Is sales really falling?</b> Not on volume — with early-May and today's part-day removed, the daily rhythm holds steady at ₹70–80k on weekdays with regular weekend dips. <b>June 1–11 averaged ₹69.5k/day vs the second half of May (12–31) at ₹67.9k</b> (+2%). The real soft spot is the <b>lunch basket</b>: the average lunch bill slipped <b>₹112 → ₹105</b> as customers traded down from premium chicken dishes — see the item movers in section 06.</div>
     </div>
   </section>
 
   <!-- 5. TOP ITEMS -->
   <section>
     <div class="sec-head"><span class="sec-num">05</span><h2>Top sellers — what's on the tray</h2></div>
-    <p class="sec-sub">From the item-wise report (184 items over the period). Ranked by net sales. The kitchen is concentrated: the <b>top 10 items make ~54%</b> of all revenue.</p>
+    <p class="sec-sub">From the item-wise report (170 items over the period). Ranked by net sales. The kitchen is concentrated: the <b>top 10 items make ~54%</b> of all revenue.</p>
     <div class="card">
       <div class="chart-box tall"><canvas id="itemChart"></canvas></div>
-      <div class="insight"><b>Meals (the lunch thali) is the engine</b> — ₹5.4L on its own (~20% of revenue, 9,065 plates), with <b>Chicken Biryani</b> next at ₹1.9L. <b>Tea</b> is third by value but #1 by volume (14,940 cups). Lunch revenue leans on Meals, Biryani and fish (Ayla / Nethal); breakfast is carried by Idly, Appam, Tea and Green Peas. Section 06 shows how these shifted May → June.</div>
+      <div class="insight"><b>Meals (the lunch thali) is the engine</b> — ₹4.2L on its own (~20% of revenue, 6,921 plates), with <b>Chicken Biryani</b> next at ₹1.4L. <b>Tea</b> is third by value but #1 by volume (11,272 cups). Lunch revenue leans on Meals, Biryani and fish (Ayla / Nethal); breakfast is carried by Idly, Appam, Tea and Green Peas. Section 06 shows how these shifted May → June.</div>
     </div>
   </section>
 
   <!-- 6. MOVERS -->
   <section>
     <div class="sec-head"><span class="sec-num">06</span><h2>What moved: May → June</h2></div>
-    <p class="sec-sub">Change in <b>net sales per day</b>, complete May (2–31) vs complete June (1–11). The chart isolates exactly which dishes are behind the lunch softening — and what's quietly filling the gap.</p>
+    <p class="sec-sub">Change in <b>net sales per day</b>, second-half May (12–31) vs June (1–11). The chart isolates exactly which dishes are behind the lunch softening — and what's quietly filling the gap.</p>
     <div class="card">
       <div class="chart-box tall"><canvas id="moverChart"></canvas></div>
-      <div class="insight"><b>It's a chicken story.</b> <b>Chicken Biryani fell ~25%</b> (₹5,072 → ₹3,786/day, 30 → 22 plates) and <b>Chicken Curry dropped ~21%</b> — these high-ticket items are what pulled the lunch bill down. Meanwhile the ₹60 <b>Meals thali held flat</b>, and <b>fish rose</b> (Nethal Fry +21%, Ayla Curry +24%) alongside cheaper breakfast/snack items (Baji Curry, Poori, Kadala Curry, Bru Coffee). Customers are <b>substituting away from chicken toward fish and cheaper plates</b> — a likely sign of a chicken price, supply, or quality change in early June worth checking with the kitchen. Note too that <b>half-biryani is up</b> while full biryani is down: same dish, smaller basket.</div>
+      <div class="insight"><b>It's a chicken story.</b> <b>Chicken Biryani fell ~25%</b> (₹5,032 → ₹3,786/day) and <b>Chicken Curry dropped ~16%</b> — the high-ticket items that pulled the lunch bill down. The ₹60 <b>Meals thali held roughly flat</b>. Filling the gap: <b>fish</b> (Ayla Curry +22%) and cheaper plates (Baji Curry, Poori, Kadala Curry, Egg Puffs), plus <b>half-biryani up while full biryani is down</b> — same dish, smaller basket. Customers are <b>substituting away from chicken</b>, a likely sign of a chicken price, supply, or quality change in June worth checking with the kitchen.</div>
+    </div>
+  </section>
+
+  <!-- 7. CHICKEN DAILY -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span><h2>Chicken Biryani &amp; Chicken Curry, day by day</h2></div>
+    <p class="sec-sub">Net sales per day for the two declining chicken dishes (12 May – 11 Jun). Watch for whether the drop is a sudden cliff or a gradual slide.</p>
+    <div class="card">
+      <div class="chart-box tall"><canvas id="chickenChart"></canvas></div>
+      <div class="insight">No single cliff — it's a <b>gradual level-shift</b>. Both ran higher and steadier through the second half of May (Biryani averaging ₹5,032/day, Curry ₹2,076), then settled lower across June (₹3,786 and ₹1,745, down ~25% and ~16%) with weak weekend dips. Because there's no abrupt break on one date, the cause is more likely a <b>standing change — a supply, price, or menu-availability shift around chicken</b> — than a one-off event.</div>
     </div>
   </section>
 
   <footer>
-    <span>KDCH Canteen · exports: orders “May–June” + item hourly + item day-wise · 30,869 orders · 184 items · 12 Jun (part-day) excluded</span>
+    <span>KDCH Canteen · exports: orders “May–June” + item hourly + item day-wise · 23,981 orders · 170 items · window 12 May – 11 Jun</span>
     <span>Payment mix: Cash 56% · UPI 44% of value</span>
   </footer>
 </div>
 
 <script>
-const DATA = {
- "summary": {
-  "total_sales": 2749649,
-  "total_orders": 30869,
-  "avg_order": 89.1,
-  "n_days": 41,
-  "avg_daily_sales": 67065,
-  "avg_daily_orders": 753,
-  "date_from": "2026-05-02",
-  "date_to": "2026-06-11"
- },
- "hourly": [
-  {
-   "hour": 6,
-   "total_sales": 7252,
-   "avg_sales_per_day": 177,
-   "orders": 111,
-   "avg_orders_per_day": 2.7,
-   "avg_order_value": 65.3
-  },
-  {
-   "hour": 7,
-   "total_sales": 152188,
-   "avg_sales_per_day": 3712,
-   "orders": 2109,
-   "avg_orders_per_day": 51.4,
-   "avg_order_value": 72.2
-  },
-  {
-   "hour": 8,
-   "total_sales": 219561,
-   "avg_sales_per_day": 5355,
-   "orders": 2914,
-   "avg_orders_per_day": 71.1,
-   "avg_order_value": 75.3
-  },
-  {
-   "hour": 9,
-   "total_sales": 177875,
-   "avg_sales_per_day": 4338,
-   "orders": 2385,
-   "avg_orders_per_day": 58.2,
-   "avg_order_value": 74.6
-  },
-  {
-   "hour": 10,
-   "total_sales": 186785,
-   "avg_sales_per_day": 4556,
-   "orders": 2690,
-   "avg_orders_per_day": 65.6,
-   "avg_order_value": 69.4
-  },
-  {
-   "hour": 11,
-   "total_sales": 179007,
-   "avg_sales_per_day": 4366,
-   "orders": 2625,
-   "avg_orders_per_day": 64.0,
-   "avg_order_value": 68.2
-  },
-  {
-   "hour": 12,
-   "total_sales": 259921,
-   "avg_sales_per_day": 6340,
-   "orders": 2509,
-   "avg_orders_per_day": 61.2,
-   "avg_order_value": 103.6
-  },
-  {
-   "hour": 13,
-   "total_sales": 552434,
-   "avg_sales_per_day": 13474,
-   "orders": 4196,
-   "avg_orders_per_day": 102.3,
-   "avg_order_value": 131.7
-  },
-  {
-   "hour": 14,
-   "total_sales": 378233,
-   "avg_sales_per_day": 9225,
-   "orders": 3018,
-   "avg_orders_per_day": 73.6,
-   "avg_order_value": 125.3
-  },
-  {
-   "hour": 15,
-   "total_sales": 149647,
-   "avg_sales_per_day": 3650,
-   "orders": 1574,
-   "avg_orders_per_day": 38.4,
-   "avg_order_value": 95.1
-  },
-  {
-   "hour": 16,
-   "total_sales": 151982,
-   "avg_sales_per_day": 3707,
-   "orders": 1891,
-   "avg_orders_per_day": 46.1,
-   "avg_order_value": 80.4
-  },
-  {
-   "hour": 17,
-   "total_sales": 116604,
-   "avg_sales_per_day": 2844,
-   "orders": 1786,
-   "avg_orders_per_day": 43.6,
-   "avg_order_value": 65.3
-  },
-  {
-   "hour": 18,
-   "total_sales": 93286,
-   "avg_sales_per_day": 2275,
-   "orders": 1422,
-   "avg_orders_per_day": 34.7,
-   "avg_order_value": 65.6
-  },
-  {
-   "hour": 19,
-   "total_sales": 95814,
-   "avg_sales_per_day": 2337,
-   "orders": 1244,
-   "avg_orders_per_day": 30.3,
-   "avg_order_value": 77.0
-  },
-  {
-   "hour": 20,
-   "total_sales": 27473,
-   "avg_sales_per_day": 670,
-   "orders": 368,
-   "avg_orders_per_day": 9.0,
-   "avg_order_value": 74.7
-  },
-  {
-   "hour": 21,
-   "total_sales": 1587,
-   "avg_sales_per_day": 39,
-   "orders": 27,
-   "avg_orders_per_day": 0.7,
-   "avg_order_value": 58.8
-  }
- ],
- "weekday_weekend": {
-  "weekday": {
-   "total_sales": 2138459,
-   "orders": 23542,
-   "n_days": 29,
-   "avg_daily_sales": 73740,
-   "avg_daily_orders": 812,
-   "avg_order_value": 90.8
-  },
-  "weekend": {
-   "total_sales": 611190,
-   "orders": 7327,
-   "n_days": 12,
-   "avg_daily_sales": 50933,
-   "avg_daily_orders": 611,
-   "avg_order_value": 83.4
-  }
- },
- "by_dow": [
-  {
-   "dow": "Monday",
-   "total_sales": 427549,
-   "avg_daily_sales": 71258,
-   "orders": 4748,
-   "n_days": 6,
-   "is_weekend": false
-  },
-  {
-   "dow": "Tuesday",
-   "total_sales": 429890,
-   "avg_daily_sales": 71648,
-   "orders": 4789,
-   "n_days": 6,
-   "is_weekend": false
-  },
-  {
-   "dow": "Wednesday",
-   "total_sales": 480216,
-   "avg_daily_sales": 80036,
-   "orders": 5114,
-   "n_days": 6,
-   "is_weekend": false
-  },
-  {
-   "dow": "Thursday",
-   "total_sales": 425306,
-   "avg_daily_sales": 70884,
-   "orders": 4775,
-   "n_days": 6,
-   "is_weekend": false
-  },
-  {
-   "dow": "Friday",
-   "total_sales": 375498,
-   "avg_daily_sales": 75100,
-   "orders": 4116,
-   "n_days": 5,
-   "is_weekend": false
-  },
-  {
-   "dow": "Saturday",
-   "total_sales": 347067,
-   "avg_daily_sales": 57845,
-   "orders": 4092,
-   "n_days": 6,
-   "is_weekend": true
-  },
-  {
-   "dow": "Sunday",
-   "total_sales": 264123,
-   "avg_daily_sales": 44020,
-   "orders": 3235,
-   "n_days": 6,
-   "is_weekend": true
-  }
- ],
- "meals": [
-  {
-   "meal": "Breakfast",
-   "total_sales": 743661,
-   "pct_sales": 27.0,
-   "orders": 10209,
-   "pct_orders": 33.1,
-   "avg_order_value": 72.8,
-   "avg_daily_sales": 18138
-  },
-  {
-   "meal": "Lunch",
-   "total_sales": 1369595,
-   "pct_sales": 49.8,
-   "orders": 12348,
-   "pct_orders": 40.0,
-   "avg_order_value": 110.9,
-   "avg_daily_sales": 33405
-  },
-  {
-   "meal": "Tea / Snacks",
-   "total_sales": 511519,
-   "pct_sales": 18.6,
-   "orders": 6673,
-   "pct_orders": 21.6,
-   "avg_order_value": 76.7,
-   "avg_daily_sales": 12476
-  },
-  {
-   "meal": "Dinner",
-   "total_sales": 124874,
-   "pct_sales": 4.5,
-   "orders": 1639,
-   "pct_orders": 5.3,
-   "avg_order_value": 76.2,
-   "avg_daily_sales": 3046
-  }
- ],
- "daily": [
-  {
-   "date": "2026-05-02",
-   "sales": 35269,
-   "orders": 425,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-03",
-   "sales": 32522,
-   "orders": 434,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-04",
-   "sales": 53579,
-   "orders": 656,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-05",
-   "sales": 57469,
-   "orders": 655,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-06",
-   "sales": 118638,
-   "orders": 1101,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-07",
-   "sales": 72995,
-   "orders": 760,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-08",
-   "sales": 76594,
-   "orders": 792,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-09",
-   "sales": 63188,
-   "orders": 743,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-10",
-   "sales": 40543,
-   "orders": 491,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-11",
-   "sales": 76399,
-   "orders": 831,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-12",
-   "sales": 74907,
-   "orders": 822,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-13",
-   "sales": 77474,
-   "orders": 822,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-14",
-   "sales": 74351,
-   "orders": 810,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-15",
-   "sales": 79442,
-   "orders": 834,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-16",
-   "sales": 60964,
-   "orders": 733,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-17",
-   "sales": 47313,
-   "orders": 575,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-18",
-   "sales": 72009,
-   "orders": 782,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-19",
-   "sales": 75902,
-   "orders": 819,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-20",
-   "sales": 75778,
-   "orders": 851,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-21",
-   "sales": 82925,
-   "orders": 884,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-22",
-   "sales": 75649,
-   "orders": 820,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-23",
-   "sales": 64193,
-   "orders": 720,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-24",
-   "sales": 47375,
-   "orders": 595,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-25",
-   "sales": 73807,
-   "orders": 797,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-26",
-   "sales": 71063,
-   "orders": 775,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-27",
-   "sales": 63822,
-   "orders": 725,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-28",
-   "sales": 59012,
-   "orders": 700,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-29",
-   "sales": 68804,
-   "orders": 804,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-05-30",
-   "sales": 63034,
-   "orders": 737,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-05-31",
-   "sales": 50334,
-   "orders": 562,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-06-01",
-   "sales": 77295,
-   "orders": 867,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-02",
-   "sales": 71904,
-   "orders": 859,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-03",
-   "sales": 77111,
-   "orders": 843,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-04",
-   "sales": 68192,
-   "orders": 793,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-05",
-   "sales": 75009,
-   "orders": 866,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-06",
-   "sales": 60419,
-   "orders": 734,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-06-07",
-   "sales": 46036,
-   "orders": 578,
-   "is_weekend": true
-  },
-  {
-   "date": "2026-06-08",
-   "sales": 74460,
-   "orders": 815,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-09",
-   "sales": 78645,
-   "orders": 859,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-10",
-   "sales": 67393,
-   "orders": 772,
-   "is_weekend": false
-  },
-  {
-   "date": "2026-06-11",
-   "sales": 67831,
-   "orders": 828,
-   "is_weekend": false
-  }
- ],
- "items": [
-  {
-   "item": "Meals",
-   "sales": 543900,
-   "qty": 9065
-  },
-  {
-   "item": "Chicken Biryani",
-   "sales": 193800,
-   "qty": 1140
-  },
-  {
-   "item": "Tea",
-   "sales": 179280,
-   "qty": 14940
-  },
-  {
-   "item": "Ayla Fry",
-   "sales": 103760,
-   "qty": 1297
-  },
-  {
-   "item": "Chicken Curry",
-   "sales": 85320,
-   "qty": 711
-  },
-  {
-   "item": "Ayla Curry",
-   "sales": 84880,
-   "qty": 1061
-  },
-  {
-   "item": "Nethal Fry",
-   "sales": 81040,
-   "qty": 1013
-  },
-  {
-   "item": "Appam",
-   "sales": 74676,
-   "qty": 6223
-  },
-  {
-   "item": "Chapathi",
-   "sales": 72444,
-   "qty": 6037
-  },
-  {
-   "item": "Idly",
-   "sales": 72432,
-   "qty": 6036
-  },
-  {
-   "item": "Green Peas",
-   "sales": 71160,
-   "qty": 1779
-  },
-  {
-   "item": "Idiyappam",
-   "sales": 53916,
-   "qty": 4493
-  },
-  {
-   "item": "Egg Curry",
-   "sales": 53000,
-   "qty": 1325
-  },
-  {
-   "item": "Porotta",
-   "sales": 45756,
-   "qty": 3813
-  },
-  {
-   "item": "Kanji",
-   "sales": 45200,
-   "qty": 2260
-  }
- ],
- "item_meta": {
-  "total": 2752883,
-  "n": 184,
-  "top10": 54.2
- },
- "movers": [
-  {
-   "item": "Chicken Biryani",
-   "may": 5072,
-   "jun": 3786,
-   "delta": -1285
-  },
-  {
-   "item": "Appam",
-   "may": 1960,
-   "jun": 1443,
-   "delta": -517
-  },
-  {
-   "item": "Ghee Rice",
-   "may": 911,
-   "jun": 436,
-   "delta": -475
-  },
-  {
-   "item": "Chicken Curry",
-   "may": 2204,
-   "jun": 1745,
-   "delta": -459
-  },
-  {
-   "item": "Idly",
-   "may": 1876,
-   "jun": 1469,
-   "delta": -406
-  },
-  {
-   "item": "Idiyappam",
-   "may": 1413,
-   "jun": 1048,
-   "delta": -364
-  },
-  {
-   "item": "Cheru Payar",
-   "may": 573,
-   "jun": 218,
-   "delta": -355
-  },
-  {
-   "item": "Ayla Curry",
-   "may": 1947,
-   "jun": 2407,
-   "delta": 461
-  },
-  {
-   "item": "Egg Puffs",
-   "may": 35,
-   "jun": 509,
-   "delta": 474
-  },
-  {
-   "item": "Kadala Curry",
-   "may": 943,
-   "jun": 1473,
-   "delta": 530
-  },
-  {
-   "item": "Bru Coffee",
-   "may": 524,
-   "jun": 1080,
-   "delta": 556
-  },
-  {
-   "item": "Chicken Biriyani Half",
-   "may": 355,
-   "jun": 1040,
-   "delta": 685
-  },
-  {
-   "item": "Poori",
-   "may": 67,
-   "jun": 936,
-   "delta": 869
-  },
-  {
-   "item": "Baji Curry",
-   "may": 199,
-   "jun": 1531,
-   "delta": 1332
-  }
- ]
-};
+const DATA = {"summary": {"total_sales": 2122453, "total_orders": 23981, "avg_order": 88.5, "n_days": 31, "avg_daily_sales": 68466, "avg_daily_orders": 774, "date_from": "2026-05-12", "date_to": "2026-06-11"}, "hourly": [{"hour": 6, "total_sales": 6175, "avg_sales_per_day": 199, "orders": 87, "avg_orders_per_day": 2.8, "avg_order_value": 71.0}, {"hour": 7, "total_sales": 113963, "avg_sales_per_day": 3676, "orders": 1612, "avg_orders_per_day": 52.0, "avg_order_value": 70.7}, {"hour": 8, "total_sales": 167161, "avg_sales_per_day": 5392, "orders": 2229, "avg_orders_per_day": 71.9, "avg_order_value": 75.0}, {"hour": 9, "total_sales": 137374, "avg_sales_per_day": 4431, "orders": 1834, "avg_orders_per_day": 59.2, "avg_order_value": 74.9}, {"hour": 10, "total_sales": 143497, "avg_sales_per_day": 4629, "orders": 2065, "avg_orders_per_day": 66.6, "avg_order_value": 69.5}, {"hour": 11, "total_sales": 140469, "avg_sales_per_day": 4531, "orders": 2042, "avg_orders_per_day": 65.9, "avg_order_value": 68.8}, {"hour": 12, "total_sales": 193466, "avg_sales_per_day": 6241, "orders": 1973, "avg_orders_per_day": 63.6, "avg_order_value": 98.1}, {"hour": 13, "total_sales": 418077, "avg_sales_per_day": 13486, "orders": 3240, "avg_orders_per_day": 104.5, "avg_order_value": 129.0}, {"hour": 14, "total_sales": 303714, "avg_sales_per_day": 9797, "orders": 2396, "avg_orders_per_day": 77.3, "avg_order_value": 126.8}, {"hour": 15, "total_sales": 123285, "avg_sales_per_day": 3977, "orders": 1244, "avg_orders_per_day": 40.1, "avg_order_value": 99.1}, {"hour": 16, "total_sales": 114311, "avg_sales_per_day": 3687, "orders": 1409, "avg_orders_per_day": 45.5, "avg_order_value": 81.1}, {"hour": 17, "total_sales": 92094, "avg_sales_per_day": 2971, "orders": 1370, "avg_orders_per_day": 44.2, "avg_order_value": 67.2}, {"hour": 18, "total_sales": 69485, "avg_sales_per_day": 2241, "orders": 1080, "avg_orders_per_day": 34.8, "avg_order_value": 64.3}, {"hour": 19, "total_sales": 71046, "avg_sales_per_day": 2292, "orders": 1015, "avg_orders_per_day": 32.7, "avg_order_value": 70.0}, {"hour": 20, "total_sales": 26749, "avg_sales_per_day": 863, "orders": 358, "avg_orders_per_day": 11.5, "avg_order_value": 74.7}, {"hour": 21, "total_sales": 1587, "avg_sales_per_day": 51, "orders": 27, "avg_orders_per_day": 0.9, "avg_order_value": 58.8}], "weekday_weekend": {"weekday": {"total_sales": 1682785, "orders": 18747, "n_days": 23, "avg_daily_sales": 73165, "avg_daily_orders": 815, "avg_order_value": 89.8}, "weekend": {"total_sales": 439668, "orders": 5234, "n_days": 8, "avg_daily_sales": 54958, "avg_daily_orders": 654, "avg_order_value": 84.0}}, "by_dow": [{"dow": "Monday", "total_sales": 297571, "avg_daily_sales": 74393, "orders": 3261, "n_days": 4, "is_weekend": false}, {"dow": "Tuesday", "total_sales": 372421, "avg_daily_sales": 74484, "orders": 4134, "n_days": 5, "is_weekend": false}, {"dow": "Wednesday", "total_sales": 361578, "avg_daily_sales": 72316, "orders": 4013, "n_days": 5, "is_weekend": false}, {"dow": "Thursday", "total_sales": 352311, "avg_daily_sales": 70462, "orders": 4015, "n_days": 5, "is_weekend": false}, {"dow": "Friday", "total_sales": 298904, "avg_daily_sales": 74726, "orders": 3324, "n_days": 4, "is_weekend": false}, {"dow": "Saturday", "total_sales": 248610, "avg_daily_sales": 62152, "orders": 2924, "n_days": 4, "is_weekend": true}, {"dow": "Sunday", "total_sales": 191058, "avg_daily_sales": 47764, "orders": 2310, "n_days": 4, "is_weekend": true}], "meals": [{"meal": "Breakfast", "total_sales": 568170, "pct_sales": 26.8, "orders": 7827, "pct_orders": 32.6, "avg_order_value": 72.6, "avg_daily_sales": 18328}, {"meal": "Lunch", "total_sales": 1055726, "pct_sales": 49.7, "orders": 9651, "pct_orders": 40.2, "avg_order_value": 109.4, "avg_daily_sales": 34056}, {"meal": "Tea / Snacks", "total_sales": 399175, "pct_sales": 18.8, "orders": 5103, "pct_orders": 21.3, "avg_order_value": 78.2, "avg_daily_sales": 12877}, {"meal": "Dinner", "total_sales": 99382, "pct_sales": 4.7, "orders": 1400, "pct_orders": 5.8, "avg_order_value": 71.0, "avg_daily_sales": 3206}], "daily": [{"date": "2026-05-12", "sales": 74907, "orders": 822, "is_weekend": false}, {"date": "2026-05-13", "sales": 77474, "orders": 822, "is_weekend": false}, {"date": "2026-05-14", "sales": 74351, "orders": 810, "is_weekend": false}, {"date": "2026-05-15", "sales": 79442, "orders": 834, "is_weekend": false}, {"date": "2026-05-16", "sales": 60964, "orders": 733, "is_weekend": true}, {"date": "2026-05-17", "sales": 47313, "orders": 575, "is_weekend": true}, {"date": "2026-05-18", "sales": 72009, "orders": 782, "is_weekend": false}, {"date": "2026-05-19", "sales": 75902, "orders": 819, "is_weekend": false}, {"date": "2026-05-20", "sales": 75778, "orders": 851, "is_weekend": false}, {"date": "2026-05-21", "sales": 82925, "orders": 884, "is_weekend": false}, {"date": "2026-05-22", "sales": 75649, "orders": 820, "is_weekend": false}, {"date": "2026-05-23", "sales": 64193, "orders": 720, "is_weekend": true}, {"date": "2026-05-24", "sales": 47375, "orders": 595, "is_weekend": true}, {"date": "2026-05-25", "sales": 73807, "orders": 797, "is_weekend": false}, {"date": "2026-05-26", "sales": 71063, "orders": 775, "is_weekend": false}, {"date": "2026-05-27", "sales": 63822, "orders": 725, "is_weekend": false}, {"date": "2026-05-28", "sales": 59012, "orders": 700, "is_weekend": false}, {"date": "2026-05-29", "sales": 68804, "orders": 804, "is_weekend": false}, {"date": "2026-05-30", "sales": 63034, "orders": 737, "is_weekend": true}, {"date": "2026-05-31", "sales": 50334, "orders": 562, "is_weekend": true}, {"date": "2026-06-01", "sales": 77295, "orders": 867, "is_weekend": false}, {"date": "2026-06-02", "sales": 71904, "orders": 859, "is_weekend": false}, {"date": "2026-06-03", "sales": 77111, "orders": 843, "is_weekend": false}, {"date": "2026-06-04", "sales": 68192, "orders": 793, "is_weekend": false}, {"date": "2026-06-05", "sales": 75009, "orders": 866, "is_weekend": false}, {"date": "2026-06-06", "sales": 60419, "orders": 734, "is_weekend": true}, {"date": "2026-06-07", "sales": 46036, "orders": 578, "is_weekend": true}, {"date": "2026-06-08", "sales": 74460, "orders": 815, "is_weekend": false}, {"date": "2026-06-09", "sales": 78645, "orders": 859, "is_weekend": false}, {"date": "2026-06-10", "sales": 67393, "orders": 772, "is_weekend": false}, {"date": "2026-06-11", "sales": 67831, "orders": 828, "is_weekend": false}], "items": [{"item": "Meals", "sales": 415260, "qty": 6921}, {"item": "Chicken Biryani", "sales": 142290, "qty": 837}, {"item": "Tea", "sales": 135264, "qty": 11272}, {"item": "Ayla Fry", "sales": 79760, "qty": 997}, {"item": "Nethal Fry", "sales": 69280, "qty": 866}, {"item": "Ayla Curry", "sales": 66080, "qty": 826}, {"item": "Chicken Curry", "sales": 60720, "qty": 506}, {"item": "Chapathi", "sales": 59484, "qty": 4957}, {"item": "Appam", "sales": 56376, "qty": 4698}, {"item": "Idly", "sales": 55824, "qty": 4652}, {"item": "Green Peas", "sales": 54520, "qty": 1363}, {"item": "Egg Curry", "sales": 40880, "qty": 1022}, {"item": "Idiyappam", "sales": 39420, "qty": 3285}, {"item": "Porotta", "sales": 37200, "qty": 3100}, {"item": "Kanji", "sales": 37140, "qty": 1857}], "item_meta": {"total": 2122463, "n": 170, "top10": 53.7}, "movers": [{"item": "Chicken Biryani", "may": 5032, "jun": 3786, "delta": -1246}, {"item": "Appam", "may": 2025, "jun": 1443, "delta": -582}, {"item": "Idly", "may": 1983, "jun": 1469, "delta": -514}, {"item": "Cheru Payar", "may": 654, "jun": 218, "delta": -436}, {"item": "Idiyappam", "may": 1394, "jun": 1048, "delta": -346}, {"item": "Chicken Curry", "may": 2076, "jun": 1745, "delta": -331}, {"item": "Green Peas", "may": 1844, "jun": 1604, "delta": -240}, {"item": "Kallumakai Fry", "may": 0, "jun": 382, "delta": 382}, {"item": "Ayla Curry", "may": 1980, "jun": 2407, "delta": 427}, {"item": "Egg Puffs", "may": 52, "jun": 509, "delta": 457}, {"item": "Kadala Curry", "may": 1012, "jun": 1473, "delta": 461}, {"item": "Chicken Biriyani Half", "may": 533, "jun": 1040, "delta": 507}, {"item": "Poori", "may": 100, "jun": 936, "delta": 836}, {"item": "Baji Curry", "may": 298, "jun": 1531, "delta": 1233}], "chicken_series": {"dates": ["2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-16", "2026-05-17", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-23", "2026-05-24", "2026-05-25", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30", "2026-05-31", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-07", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11"], "biryani": [5610, 6120, 7480, 7140, 3910, 3400, 5100, 7480, 5610, 5950, 5610, 3740, 2550, 5610, 4080, 4250, 4080, 4080, 5610, 3230, 3740, 4080, 4250, 4080, 5780, 2720, 1700, 5100, 5270, 2720, 2210], "chicken_curry": [3000, 2400, 3480, 3240, 720, 960, 1080, 2400, 1920, 2640, 1560, 1800, 1800, 2160, 1920, 2520, 2040, 2640, 1680, 1560, 1560, 1800, 2520, 1680, 1440, 1800, 600, 1800, 1560, 2400, 2040]}};
 
 const F = {family:"'Hanken Grotesk', sans-serif"};
 Chart.defaults.font.family = "'Hanken Grotesk', sans-serif";
@@ -1040,6 +379,27 @@ if(_built) return; _built=true;
       scales:{x:{grid:{color:C.line},ticks:{callback:v=>(v>0?'+':'')+'₹'+(v/1000)+'k'},
           title:{display:true,text:'₹ change per day',font:{size:11}}},
         y:{grid:{display:false},ticks:{font:{size:11.5}}}}}
+  });
+})();
+
+/* 7. CHICKEN DAILY LINES */
+(()=>{
+  const s = DATA.chicken_series;
+  const labels = s.dates.map(d=>{const dt=new Date(d);return dt.getDate()+'/'+(dt.getMonth()+1);});
+  new Chart(document.getElementById('chickenChart'),{
+    type:'line',
+    data:{labels,
+      datasets:[
+        {label:'Chicken Biryani',data:s.biryani,borderColor:C.terra,backgroundColor:C.terra,
+         borderWidth:2.5,tension:.3,pointRadius:2,pointHoverRadius:4,fill:false},
+        {label:'Chicken Curry',data:s.chicken_curry,borderColor:C.sage,backgroundColor:C.sage,
+         borderWidth:2.5,tension:.3,pointRadius:2,pointHoverRadius:4,fill:false}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:16,font:{size:12.5}}},
+        tooltip:{callbacks:{label:c=>'  '+c.dataset.label+': '+rupee(c.parsed.y)}}},
+      scales:{y:{grid:{color:C.line},ticks:{callback:v=>'₹'+(v/1000)+'k'},beginAtZero:true,title:{display:true,text:'net sales / day',font:{size:11}}},
+        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:0,autoSkip:true,maxTicksLimit:14}}}}
   });
 })();
 
